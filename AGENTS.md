@@ -33,10 +33,10 @@
 
 ```bash
 npm start              # 启动本地服务器，端口 3456
-npm run deploy         # 部署到 EdgeOne Pages
+npm run deploy         # 部署到 GitHub Pages
 # 或双击 start.bat     # 启动服务器并打开浏览器
 
-部署到 EdgeOne Pages（URL 含临时 token），也可在页面内点击「发布」一键部署
+部署到 GitHub Pages（使用 `deploy.js` 通过 GitHub API 自动部署），也可在页面内点击「发布」一键部署
 
 ## 页面架构
 
@@ -53,7 +53,7 @@ npm run deploy         # 部署到 EdgeOne Pages
 - **无框架**：纯 JavaScript，不使用 Vue/React 等
 - **样式**：2045 行 CSS，CSS 变量主题化，玻璃态效果
 - **字体**：Google Fonts Inter（UI）+ JetBrains Mono（日志）
-- **部署**：腾讯云 EdgeOne Pages（deploy.js，需 `EDGEONE_API_TOKEN`）
+- **部署**：GitHub Pages（deploy.js 通过 GitHub API 自动部署，需 `GH_TOKEN` 或 `.github/token`）
 - **仓库**：https://github.com/Fred-Leifu/prototype（已公开）
 - **sidepanel DOM 在 index.html**，子页面通过 `postMessage` 请求打开，禁止在子页面内创建
 

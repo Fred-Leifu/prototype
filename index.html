@@ -12,7 +12,7 @@
 <body>
     <div class="app-container">
         <nav class="axure-nav">
-            <div class="axure-header">页面导航<button class="publish-btn" onclick="showDeployModal()" title="发布到 EdgeOne Pages">发布</button></div>
+            <div class="axure-header">页面导航<button class="publish-btn" onclick="showDeployModal()" title="发布到 GitHub Pages">发布</button></div>
             <div class="axure-tree">
                 <div class="axure-module">
                     <div class="axure-module-header" onclick="toggleAxureModule(this)">
@@ -457,7 +457,7 @@
     <div class="modal-overlay" id="deployModal">
         <div class="modal" style="max-width:560px">
             <div class="modal-header">
-                <h3>部署到 EdgeOne Pages</h3>
+                <h3>部署到 GitHub Pages</h3>
                 <button class="modal-close" onclick="closeDeployModal()">×</button>
             </div>
             <div class="modal-body">
@@ -1405,7 +1405,7 @@
             }
         });
 
-        /* ===== 部署到 EdgeOne Pages ===== */
+        /* ===== 部署到 GitHub Pages ===== */
         function showDeployModal() {
             document.getElementById('deployModal').classList.add('active');
             document.getElementById('deploy-urls').style.display = 'none';
@@ -1541,7 +1541,7 @@
         }
 
         function startDeploy() {
-            setDeployStatus('running', '正在部署到 EdgeOne Pages...');
+            setDeployStatus('running', '正在部署到 GitHub Pages...');
             document.getElementById('deploy-urls').style.display = 'none';
             appendLog('正在建立连接...');
 
@@ -1583,7 +1583,7 @@
                 appendLog('');
                 appendLog('或者手动运行:');
                 appendLog('  方式1: node deploy.js');
-                appendLog('  方式2: edgeone pages deploy . -n prototype -t <token>');
+                        appendLog('  方式2: node deploy.js');
             };
             xhr.ontimeout = function() {
                 setDeployStatus('error', '部署超时');

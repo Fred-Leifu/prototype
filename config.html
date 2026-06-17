@@ -89,7 +89,7 @@
                     <td>按月对账</td>
                     <td class="sticky-col">
                         <div class="action-buttons">
-                            <button class="action-btn edit" onclick="parent.openConfigSidePanel('GRP001')">修改</button>
+                            <button class="action-btn edit" onclick="openConfigSidePanel('GRP001')">修改</button>
                             <span class="modify-record-trigger" onclick="toggleModifyRecord(this)">
                                 查看修改记录
                                 <div class="modify-record-popup">
@@ -151,7 +151,7 @@
                     <td>按季度对账</td>
                     <td class="sticky-col">
                         <div class="action-buttons">
-                            <button class="action-btn edit" onclick="parent.openConfigSidePanel('GRP002')">修改</button>
+                            <button class="action-btn edit" onclick="openConfigSidePanel('GRP002')">修改</button>
                             <span class="modify-record-trigger" onclick="toggleModifyRecord(this)">
                                 查看修改记录
                                 <div class="modify-record-popup">
@@ -206,7 +206,7 @@
                     <td>按年对账</td>
                     <td class="sticky-col">
                         <div class="action-buttons">
-                            <button class="action-btn edit" onclick="parent.openConfigSidePanel('GRP003')">修改</button>
+                            <button class="action-btn edit" onclick="openConfigSidePanel('GRP003')">修改</button>
                             <span class="modify-record-trigger" onclick="toggleModifyRecord(this)">
                                 查看修改记录
                                 <div class="modify-record-popup">
@@ -254,7 +254,7 @@
                     <td>按月对账</td>
                     <td class="sticky-col">
                         <div class="action-buttons">
-                            <button class="action-btn edit" onclick="parent.openConfigSidePanel('GRP004')">修改</button>
+                            <button class="action-btn edit" onclick="openConfigSidePanel('GRP004')">修改</button>
                             <span class="modify-record-trigger" onclick="toggleModifyRecord(this)">
                                 查看修改记录
                                 <div class="modify-record-popup">
@@ -326,6 +326,11 @@
     </div>
 
     <script>
+        /* ===== 桥接函数：通过 postMessage 通知父页面 ===== */
+        function openConfigSidePanel(groupId) {
+            parent.postMessage({ action: 'openConfigSidePanel', groupId: groupId }, '*');
+        }
+
         /* ===== 修改记录悬浮框（页面专用） ===== */
         function toggleModifyRecord(el) {
             el.classList.toggle('active');

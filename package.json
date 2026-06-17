@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "scripts": {
+    "deploy": "node deploy.js",
+    "start": "node server.js"
+  }
+}

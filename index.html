@@ -12,7 +12,7 @@
 <body>
     <div class="app-container">
         <nav class="axure-nav">
-            <div class="axure-header">页面导航</div>
+            <div class="axure-header">页面导航<button class="publish-btn" onclick="showDeployModal()" title="发布到 EdgeOne Pages">发布</button></div>
             <div class="axure-tree">
                 <div class="axure-module">
                     <div class="axure-module-header" onclick="toggleAxureModule(this)">
@@ -319,7 +319,7 @@
                                 </tr>
                                 <tr>
                                     <td>未出账账单查看<br><span style="font-size:12px;color:var(--text-light)">（预估与查询）</span></td>
-                                    <td>从下单发货到最终开票往往存在时间差，客户需要随时了解已发货未结算的潜在债务，以便做资金预算</td>
+                                    <td>从下单发货到最终开票往往存在时间差，客户需要随时了解已下单未结算的潜在债务，以便做资金预算</td>
                                     <td>减少客户因信息不对称反复电话咨询，帮助客户提前规划现金流，降低沟通成本</td>
                                     <td>未出账账单系统自动生成、按单位/课题组/客户多维查看、详情导出</td>
                                 </tr>
@@ -449,6 +449,46 @@
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeModal()">取消</button>
                 <button class="btn btn-primary" onclick="saveModal()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 部署弹窗 -->
+    <div class="modal-overlay" id="deployModal">
+        <div class="modal" style="max-width:560px">
+            <div class="modal-header">
+                <h3>部署到 EdgeOne Pages</h3>
+                <button class="modal-close" onclick="closeDeployModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div id="deploy-status" style="margin-bottom:12px">
+                    <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+                        <span id="deploy-indicator" style="width:10px;height:10px;border-radius:50%;background:#ccc;flex-shrink:0"></span>
+                        <span id="deploy-msg" style="font-size:14px;color:#666">就绪</span>
+                    </div>
+                    <div id="deploy-progress" style="display:none;height:4px;background:#e0e0e0;border-radius:2px;overflow:hidden">
+                        <div id="deploy-bar" style="height:100%;width:0%;background:#00AD9F;border-radius:2px;transition:width 0.3s"></div>
+                    </div>
+                </div>
+                <div id="deploy-urls" style="display:none;margin-bottom:12px">
+                    <div class="deploy-url-row">
+                        <span class="deploy-url-label">正式地址</span>
+                        <input class="deploy-url-input" id="deploy-url-main" readonly onclick="this.select()">
+                        <button class="deploy-url-copy" onclick="copyDeployUrl('deploy-url-main')">复制</button>
+                        <button class="deploy-url-open" onclick="openDeployUrl('deploy-url-main')">打开</button>
+                    </div>
+                    <div class="deploy-url-row" id="deploy-preview-row" style="display:none">
+                        <span class="deploy-url-label">预览地址</span>
+                        <input class="deploy-url-input" id="deploy-url-preview" readonly onclick="this.select()">
+                        <button class="deploy-url-copy" onclick="copyDeployUrl('deploy-url-preview')">复制</button>
+                        <button class="deploy-url-open" onclick="openDeployUrl('deploy-url-preview')">打开</button>
+                    </div>
+                </div>
+                <div id="deploy-log" style="background:#1e1e1e;color:#d4d4d4;border-radius:8px;padding:12px;font-size:12px;font-family:'JetBrains Mono',monospace;max-height:200px;overflow-y:auto;white-space:pre-wrap"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeDeployModal()">关闭</button>
+                <button class="btn btn-primary" id="deployBtn" onclick="startDeploy()">立即发布</button>
             </div>
         </div>
     </div>
@@ -684,6 +724,7 @@
 
     <script>
         var sidePanelBodyHTML = '';
+        var _mergeRowCounter = 0;
 
         document.addEventListener('DOMContentLoaded', function() {
             initNavigation();
@@ -1095,7 +1136,6 @@
         /* ===== 对账单侧边面板 ===== */
         function openStatementSidePanel(title) {
             document.getElementById('panel-title').textContent = title;
-            document.querySelector('.side-panel-header h3').textContent = '订单列表 - ' + title;
             document.getElementById('sidePanel').classList.add('active');
             document.body.style.overflow = 'hidden';
         }
@@ -1109,67 +1149,96 @@
         /* ===== 配置修改侧边面板 ===== */
         function openConfigSidePanel(groupId) {
             var panel = document.getElementById('sidePanel');
-            document.querySelector('.side-panel-header h3').textContent = '修改配置 - ' + groupId;
+            var h3 = document.querySelector('.side-panel-header h3');
+            h3.innerHTML = '修改配置 - <span id="panel-title">' + groupId + '</span>';
             var body = document.querySelector('.side-panel-body');
-            body.innerHTML = `
-                <div class="config-edit-form">
-                    <div class="config-edit-section">
-                        <h4>对账维度配置</h4>
-                        <div class="dimension-radio-group">
-                            <label><input type="radio" name="dimension" value="individual" onchange="toggleDimensionSub(this)"> 按客户个人</label>
-                            <label><input type="radio" name="dimension" value="group" checked onchange="toggleDimensionSub(this)"> 按课题组</label>
-                        </div>
-                        <div class="dimension-sub-section" id="dim-sub-individual">
-                            <div class="sub-header">报账人信息</div>
-                            <div class="form-group">
-                                <label>报账人姓名</label>
-                                <input type="text" placeholder="请输入报账人姓名">
-                            </div>
-                            <div class="form-group">
-                                <label>联系方式</label>
-                                <input type="text" placeholder="请输入联系方式">
-                            </div>
-                            <div class="form-group">
-                                <label>邮箱</label>
-                                <input type="email" placeholder="请输入邮箱地址">
-                            </div>
-                            <div class="form-group">
-                                <label>详细地址</label>
-                                <input type="text" placeholder="请输入详细地址">
-                            </div>
-                            <div style="margin-top:12px">
-                                <button class="add-row-btn" onclick="alert('添加合并报账客户')">+ 添加其他合并报账客户</button>
-                            </div>
-                        </div>
-                        <div class="dimension-sub-section active" id="dim-sub-group">
-                            <div class="sub-header">报账人信息</div>
-                            <div class="form-group">
-                                <label>报账人姓名</label>
-                                <input type="text" placeholder="请输入报账人姓名" value="张会计">
-                            </div>
-                            <div class="form-group">
-                                <label>联系方式</label>
-                                <input type="text" placeholder="请输入联系方式" value="13800000001">
-                            </div>
-                            <div class="form-group">
-                                <label>邮箱</label>
-                                <input type="email" placeholder="请输入邮箱地址" value="zhang@example.com">
-                            </div>
-                            <div class="form-group">
-                                <label>详细地址</label>
-                                <input type="text" placeholder="请输入详细地址" value="北京市海淀区中关村大街1号">
-                            </div>
-                            <div style="margin-top:12px">
-                                <button class="add-row-btn" onclick="alert('添加合并报账课题组')">+ 添加其他合并报账课题组</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="config-edit-footer">
-                        <button class="btn btn-secondary" onclick="closeSidePanel()">取消</button>
-                        <button class="btn btn-primary" onclick="alert('保存成功');closeSidePanel()">保存</button>
-                    </div>
-                </div>
-            `;
+
+            // 生成报账周期月份下拉
+            var monthOptions = '';
+            for (var d = 1; d <= 31; d++) {
+                monthOptions += '<option value="' + d + '">' + d + '</option>';
+            }
+            var monthNames = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+            var monthRows = '<tr>';
+            for (var m = 0; m < 12; m++) {
+                monthRows += '<th>' + monthNames[m] + '</th>';
+            }
+            monthRows += '</tr><tr>';
+            for (var m = 0; m < 12; m++) {
+                monthRows += '<td><select id="bc-month-' + (m+1) + '" disabled>' + monthOptions.replace('value="28"', 'value="28" selected') + '</select></td>';
+            }
+            monthRows += '</tr>';
+
+            body.innerHTML =
+                '<div class="config-edit-form">' +
+                    '<div class="config-edit-section">' +
+                        '<h4>对账维度配置</h4>' +
+                        '<div class="dimension-radio-group">' +
+                            '<label><input type="radio" name="dimension" value="individual" onchange="toggleDimensionSub(this)"> 按客户个人</label>' +
+                            '<label><input type="radio" name="dimension" value="group" checked onchange="toggleDimensionSub(this)"> 按课题组</label>' +
+                        '</div>' +
+                        '<div class="dimension-sub-section" id="dim-sub-individual">' +
+                            '<div class="sub-header">报账人信息</div>' +
+                            '<div class="config-edit-grid">' +
+                                '<div class="form-group"><label>报账人姓名</label><input type="text" placeholder="请输入报账人姓名"></div>' +
+                                '<div class="form-group"><label>联系方式</label><input type="text" placeholder="请输入联系方式"></div>' +
+                                '<div class="form-group"><label>邮箱</label><input type="email" placeholder="请输入邮箱地址"></div>' +
+                                '<div class="form-group"><label>详细地址</label><input type="text" placeholder="请输入详细地址"></div>' +
+                            '</div>' +
+                            '<div style="margin-top:12px"><button class="add-row-btn" onclick="addMergeRow(\'merge-list-customer\', demoCustomers, \'请选择客户名称\')">+ 添加其他合并报账客户</button></div>' +
+                            '<div class="merge-list" id="merge-list-customer"></div>' +
+                        '</div>' +
+                        '<div class="dimension-sub-section active" id="dim-sub-group">' +
+                            '<div class="sub-header">报账人信息</div>' +
+                            '<div class="config-edit-grid">' +
+                                '<div class="form-group"><label>报账人姓名</label><input type="text" placeholder="请输入报账人姓名" value="张会计"></div>' +
+                                '<div class="form-group"><label>联系方式</label><input type="text" placeholder="请输入联系方式" value="13800000001"></div>' +
+                                '<div class="form-group"><label>邮箱</label><input type="email" placeholder="请输入邮箱地址" value="zhang@example.com"></div>' +
+                                '<div class="form-group"><label>详细地址</label><input type="text" placeholder="请输入详细地址" value="北京市海淀区中关村大街1号"></div>' +
+                            '</div>' +
+                            '<div style="margin-top:12px"><button class="add-row-btn" onclick="addMergeRow(\'merge-list-group\', demoGroups, \'请选择课题组名称\')">+ 添加其他合并报账课题组</button></div>' +
+                            '<div class="merge-list" id="merge-list-group"></div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="config-edit-section">' +
+                        '<h4>自动化配置</h4>' +
+                        '<div class="form-group">' +
+                            '<label>报账周期</label>' +
+                            '<div class="billing-cycle-radio">' +
+                                '<label><input type="radio" name="billingCycle" value="none" checked onchange="toggleBillingCycle(this.value)"> 无约定</label>' +
+                                '<label><input type="radio" name="billingCycle" value="custom" onchange="toggleBillingCycle(this.value)"> 有约定</label>' +
+                            '</div>' +
+                            '<div class="billing-cycle-table-wrap">' +
+                                '<table class="billing-cycle-table">' + monthRows + '</table>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                            '<label>凭证上传</label>' +
+                            '<div class="upload-area" onclick="document.getElementById(\'fileUpload\').click()">' +
+                                '<div class="upload-icon">+</div>' +
+                                '<div class="upload-text">点击上传附件</div>' +
+                                '<div class="upload-hint">支持图片、文档类型，提交后不可修改</div>' +
+                                '<input type="file" id="fileUpload" accept="image/*,.pdf,.doc,.docx" style="display:none" onchange="handleFileUpload(this)">' +
+                            '</div>' +
+                            '<div class="upload-record-list" id="uploadRecordList">' +
+                                '<div class="upload-record-header">上传记录</div>' +
+                                '<div class="upload-record-item">' +
+                                    '<span class="file-name">对账凭证_202606.pdf</span>' +
+                                    '<span class="file-meta">系统管理员 · 2026-06-15 14:30</span>' +
+                                '</div>' +
+                                '<div class="upload-record-item">' +
+                                    '<span class="file-name">结算清单_202606.docx</span>' +
+                                    '<span class="file-meta">系统管理员 · 2026-06-15 14:25</span>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="config-edit-footer">' +
+                        '<button class="btn btn-secondary" onclick="closeSidePanel()">取消</button>' +
+                        '<button class="btn btn-primary" onclick="alert(\'保存成功\');closeSidePanel()">保存</button>' +
+                    '</div>' +
+                '</div>';
+
             panel.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
@@ -1177,6 +1246,119 @@
         function toggleDimensionSub(radio) {
             document.getElementById('dim-sub-individual').classList.toggle('active', radio.value === 'individual');
             document.getElementById('dim-sub-group').classList.toggle('active', radio.value === 'group');
+        }
+
+        function toggleBillingCycle(value) {
+            var disabled = (value === 'none');
+            for (var m = 1; m <= 12; m++) {
+                var sel = document.getElementById('bc-month-' + m);
+                if (sel) sel.disabled = disabled;
+            }
+        }
+
+        function handleFileUpload(input) {
+            if (input.files && input.files[0]) {
+                alert('已上传: ' + input.files[0].name);
+                input.value = '';
+            }
+        }
+
+        /* ===== 演示数据 ===== */
+        var demoCustomers = [
+            '北京华大基因科技有限公司',
+            '上海生工生物工程有限公司',
+            '广州达安基因股份有限公司',
+            '深圳华大智造科技有限公司',
+            '杭州博日科技股份有限公司',
+            '南京诺唯赞生物科技股份有限公司',
+            '武汉康圣环球医学检验所有限公司',
+            '成都贝瑞和康基因技术有限公司'
+        ];
+        var demoGroups = [
+            '张教授课题组（分子生物学）',
+            '李教授课题组（遗传学）',
+            '王教授课题组（细胞生物学）',
+            '赵教授课题组（药物研发）',
+            '陈教授课题组（免疫学）',
+            '刘教授课题组（化学生物学）',
+            '周教授课题组（神经科学）',
+            '吴教授课题组（合成生物学）'
+        ];
+
+        /* ===== 多选下拉 ===== */
+        function createMultiSelectHTML(id, items, placeholder) {
+            var html = '<div class="multi-select" id="' + id + '">';
+            html += '<div class="multi-select-trigger" onclick="toggleMultiSelect(this)">';
+            html += '<span class="multi-select-placeholder" data-placeholder="' + escHtml(placeholder || '请选择') + '">' + escHtml(placeholder || '请选择') + '</span>';
+            html += '<span class="multi-select-arrow">▾</span>';
+            html += '</div>';
+            html += '<div class="multi-select-dropdown">';
+            html += '<input type="text" class="multi-select-search" placeholder="搜索..." oninput="filterMultiSelect(this)">';
+            html += '<div class="multi-select-options">';
+            for (var i = 0; i < items.length; i++) {
+                html += '<label class="multi-select-option"><input type="checkbox" value="' + escHtml(items[i]) + '" onchange="updateMultiSelectLabel(this)"> ' + escHtml(items[i]) + '</label>';
+            }
+            html += '</div></div></div>';
+            return html;
+        }
+
+        function toggleMultiSelect(trigger) {
+            var wrapper = trigger.parentNode;
+            var isOpen = wrapper.classList.contains('open');
+            document.querySelectorAll('.multi-select.open').forEach(function(el) {
+                el.classList.remove('open');
+            });
+            if (!isOpen) wrapper.classList.add('open');
+        }
+
+        function updateMultiSelectLabel(cb) {
+            var wrapper = cb.closest('.multi-select');
+            var checked = wrapper.querySelectorAll('.multi-select-option input:checked');
+            var placeholder = wrapper.querySelector('.multi-select-placeholder');
+            var trigger = wrapper.querySelector('.multi-select-trigger');
+            if (checked.length === 0) {
+                placeholder.textContent = placeholder.getAttribute('data-placeholder') || '请选择';
+            } else {
+                var labels = [];
+                checked.forEach(function(c) { labels.push(c.value); });
+                placeholder.textContent = labels.join(', ');
+            }
+            trigger.classList.toggle('has-value', checked.length > 0);
+        }
+
+        function filterMultiSelect(input) {
+            var keyword = input.value.toLowerCase().trim();
+            var options = input.parentNode.querySelectorAll('.multi-select-option');
+            options.forEach(function(opt) {
+                opt.style.display = opt.textContent.toLowerCase().includes(keyword) ? '' : 'none';
+            });
+        }
+
+        function addMergeRow(containerId, items, placeholder) {
+            var list = document.getElementById(containerId);
+            if (!list) return;
+            var id = ++_mergeRowCounter;
+            var row = document.createElement('div');
+            row.className = 'merge-row';
+            row.id = 'merge-row-' + id;
+            row.innerHTML =
+                '<div class="merge-row-field">' + createMultiSelectHTML('ms-' + id, items, placeholder) + '</div>' +
+                '<div class="merge-row-field"><input type="text" class="merge-input" placeholder="报账人姓名"></div>' +
+                '<div class="merge-row-field"><input type="text" class="merge-input" placeholder="联系方式"></div>' +
+                '<div class="merge-row-field"><input type="text" class="merge-input" placeholder="邮箱"></div>' +
+                '<button class="merge-row-del" onclick="removeMergeRow(' + id + ')">×</button>';
+            list.appendChild(row);
+        }
+
+        function removeMergeRow(id) {
+            var row = document.getElementById('merge-row-' + id);
+            if (row) row.remove();
+        }
+
+        function escHtml(str) {
+            var d = document.createElement('div');
+            d.textContent = str || '';
+            return d.innerHTML;
         }
 
         /* ===== 修改记录悬浮框 ===== */
@@ -1193,18 +1375,238 @@
             }
         });
 
+        /* 点击其他区域关闭多选下拉 */
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.multi-select')) {
+                document.querySelectorAll('.multi-select.open').forEach(function(el) {
+                    el.classList.remove('open');
+                });
+            }
+        });
+
         /* ===== 键盘快捷键: ESC 关闭面板 ===== */
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') closeSidePanel();
         });
 
-        /* ===== iframe 自适应高度 ===== */
+        /* ===== iframe 通信 ===== */
         window.addEventListener('message', function(e) {
+            var iframe = document.getElementById('page-iframe');
             if (e.data && e.data.iframeHeight) {
-                var iframe = document.getElementById('page-iframe');
                 iframe.style.height = e.data.iframeHeight + 'px';
             }
+            if (e.data && e.data.action === 'openSidePanel') {
+                document.getElementById('panel-title').textContent = e.data.title;
+                document.getElementById('sidePanel').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+            if (e.data && e.data.action === 'openConfigSidePanel') {
+                openConfigSidePanel(e.data.groupId);
+            }
         });
+
+        /* ===== 部署到 EdgeOne Pages ===== */
+        function showDeployModal() {
+            document.getElementById('deployModal').classList.add('active');
+            document.getElementById('deploy-urls').style.display = 'none';
+            document.getElementById('deploy-log').textContent = '';
+            document.getElementById('deployBtn').disabled = false;
+
+            // 判断运行环境：通过本地服务器打开 还是 直接打开文件
+            var isLocalhost = window.location.href.indexOf('localhost:' + 3456) !== -1 ||
+                              window.location.href.indexOf('127.0.0.1:' + 3456) !== -1;
+            if (isLocalhost) {
+                setDeployStatus('idle', '就绪，点击"立即发布"');
+                document.getElementById('deployBtn').textContent = '立即发布';
+                document.getElementById('deployBtn').onclick = startDeploy;
+                return;
+            }
+            // 未通过本地服务器打开，自动检测服务
+            setDeployStatus('idle', '检测部署服务...');
+            var check = new XMLHttpRequest();
+            check.open('GET', 'http://localhost:3456/api/deploy', true);
+            check.timeout = 2000;
+            check.onload = function() {
+                setDeployStatus('idle', '部署服务就绪，点击"立即发布"');
+                document.getElementById('deployBtn').textContent = '立即发布';
+                document.getElementById('deployBtn').onclick = startDeploy;
+                appendLog('连接部署服务成功 (localhost:3456)');
+            };
+            check.onerror = function() {
+                setDeployStatus('idle', '部署服务未运行');
+                document.getElementById('deployBtn').textContent = '一键启动并部署';
+                document.getElementById('deployBtn').onclick = startServerAndDeploy;
+                appendLog('未检测到本地部署服务 (localhost:3456)');
+                appendLog('点击"一键启动并部署"自动完成');
+                appendLog('或手动打开 http://localhost:3456');
+            };
+            check.ontimeout = function() {
+                check.onerror();
+            };
+            check.send();
+        }
+
+        function startServerAndDeploy() {
+            setDeployStatus('running', '正在启动服务...');
+            document.getElementById('deployBtn').disabled = true;
+            document.getElementById('deployBtn').textContent = '启动中...';
+            appendLog('正在启动本地部署服务...');
+
+            // 动态生成启动脚本，使用当前页面路径
+            var basePath = window.location.href.replace(/index\.html.*$/i, '').replace(/file:\/\//i, '').replace(/\//g, '\\');
+            var batContent = '@echo off\r\ncd /d "' + basePath + '"\r\ntitle 销售综合管理系统 - 部署服务\r\necho 正在启动部署服务...\r\nstart /B node server.js\r\ntimeout /T 3 /NOBREAK >nul\r\necho.\r\necho 服务已启动！此窗口将自动关闭。\r\ntimeout /T 2 /NOBREAK >nul';
+            var blob = new Blob([batContent], { type: 'application/x-bat' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = '启动部署服务.bat';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            appendLog('已生成启动脚本，请在弹窗中点击"保留"并运行');
+            appendLog('等待服务启动...');
+
+            // 轮询检测服务是否就绪，就绪后自动部署
+            var attempts = 0;
+            var timer = setInterval(function() {
+                attempts++;
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', 'http://localhost:3456/api/deploy', true);
+                xhr.timeout = 2000;
+                xhr.onload = function() {
+                    clearInterval(timer);
+                    appendLog('检测到服务已启动！开始部署...');
+                    document.getElementById('deployBtn').disabled = false;
+                    document.getElementById('deployBtn').onclick = startDeploy;
+                    startDeploy();
+                };
+                xhr.onerror = function() {
+                    if (attempts >= 30) {
+                        clearInterval(timer);
+                        setDeployStatus('error', '服务启动超时');
+                        document.getElementById('deployBtn').disabled = false;
+                        document.getElementById('deployBtn').textContent = '重试';
+                        document.getElementById('deployBtn').onclick = startServerAndDeploy;
+                        appendLog('请手动运行项目目录下的 start.bat');
+                        appendLog('或打开 http://localhost:3456 使用原型');
+                    } else {
+                        appendLog('等待服务启动 (' + attempts + 's)...');
+                    }
+                };
+                xhr.send();
+            }, 2000);
+        }
+
+        function closeDeployModal() {
+            document.getElementById('deployModal').classList.remove('active');
+        }
+
+        function setDeployStatus(state, msg) {
+            var indicator = document.getElementById('deploy-indicator');
+            var msgEl = document.getElementById('deploy-msg');
+            var bar = document.getElementById('deploy-bar');
+            var progress = document.getElementById('deploy-progress');
+            msgEl.textContent = msg;
+            if (state === 'running') {
+                indicator.style.background = '#f59e0b';
+                progress.style.display = 'block';
+                bar.style.width = '50%';
+                document.getElementById('deployBtn').disabled = true;
+                document.getElementById('deployBtn').textContent = '部署中...';
+            } else if (state === 'done') {
+                indicator.style.background = '#10b981';
+                progress.style.display = 'block';
+                bar.style.width = '100%';
+                document.getElementById('deployBtn').disabled = false;
+                document.getElementById('deployBtn').textContent = '重新发布';
+            } else if (state === 'error') {
+                indicator.style.background = '#ef4444';
+                progress.style.display = 'none';
+                document.getElementById('deployBtn').disabled = false;
+                document.getElementById('deployBtn').textContent = '重试';
+            } else {
+                indicator.style.background = '#ccc';
+                progress.style.display = 'none';
+                document.getElementById('deployBtn').disabled = false;
+                document.getElementById('deployBtn').textContent = '立即发布';
+            }
+        }
+
+        function appendLog(msg) {
+            var log = document.getElementById('deploy-log');
+            log.textContent += msg + '\n';
+            log.scrollTop = log.scrollHeight;
+        }
+
+        function startDeploy() {
+            setDeployStatus('running', '正在部署到 EdgeOne Pages...');
+            document.getElementById('deploy-urls').style.display = 'none';
+            appendLog('正在建立连接...');
+
+            var isLocalhost = window.location.href.indexOf('localhost:' + 3456) !== -1 ||
+                              window.location.href.indexOf('127.0.0.1:' + 3456) !== -1;
+            var deployUrl = isLocalhost ? '/api/deploy' : 'http://localhost:3456/api/deploy';
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', deployUrl, true);
+            xhr.timeout = 120000;
+            xhr.onload = function() {
+                try {
+                    var res = JSON.parse(xhr.responseText);
+                    if (res.success) {
+                        setDeployStatus('done', '部署成功！');
+                        document.getElementById('deploy-url-main').value = res.url;
+                        document.getElementById('deploy-urls').style.display = '';
+                        if (res.preview && res.preview !== res.url) {
+                            document.getElementById('deploy-url-preview').value = res.preview;
+                            document.getElementById('deploy-preview-row').style.display = '';
+                        } else {
+                            document.getElementById('deploy-preview-row').style.display = 'none';
+                        }
+                        appendLog('');
+                        appendLog('已发布到: ' + res.url);
+                    } else {
+                        setDeployStatus('error', '部署失败');
+                        appendLog('错误: ' + (res.error || xhr.responseText));
+                    }
+                } catch(e) {
+                    setDeployStatus('error', '响应解析失败');
+                    appendLog(xhr.responseText);
+                }
+            };
+            xhr.onerror = function() {
+                setDeployStatus('error', '无法连接部署服务');
+                appendLog('请确保本地部署服务已启动:');
+                appendLog('  node server.js');
+                appendLog('');
+                appendLog('或者手动运行:');
+                appendLog('  方式1: node deploy.js');
+                appendLog('  方式2: edgeone pages deploy . -n prototype -t <token>');
+            };
+            xhr.ontimeout = function() {
+                setDeployStatus('error', '部署超时');
+                appendLog('部署超过120秒未响应');
+            };
+            xhr.send();
+        }
+
+        function copyDeployUrl(inputId) {
+            var input = document.getElementById(inputId);
+            input.select();
+            input.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            var btn = input.parentNode.querySelector('.deploy-url-copy');
+            var orig = btn.textContent;
+            btn.textContent = '已复制';
+            setTimeout(function() { btn.textContent = orig; }, 1500);
+        }
+
+        function openDeployUrl(inputId) {
+            var url = document.getElementById(inputId).value;
+            if (url) window.open(url, '_blank');
+        }
     </script>
 </body>
 </html>

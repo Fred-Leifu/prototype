@@ -68,28 +68,28 @@
                         <td>ORG-001</td>
                         <td>¥125,800.00</td>
                         <td>2024-01-15 14:30</td>
-                        <td><button class="action-btn view" onclick="parent.openSidePanel('北京科技有限公司')">查看</button></td>
+                        <td><button class="action-btn view" onclick="openSidePanel('北京科技有限公司')">查看</button></td>
                     </tr>
                     <tr>
                         <td>上海生物科技</td>
                         <td>ORG-002</td>
                         <td>¥86,200.00</td>
                         <td>2024-01-14 10:15</td>
-                        <td><button class="action-btn view" onclick="parent.openSidePanel('上海生物科技')">查看</button></td>
+                        <td><button class="action-btn view" onclick="openSidePanel('上海生物科技')">查看</button></td>
                     </tr>
                     <tr>
                         <td>广州医药集团</td>
                         <td>ORG-003</td>
                         <td>¥156,300.00</td>
                         <td>2024-01-13 16:45</td>
-                        <td><button class="action-btn view" onclick="parent.openSidePanel('广州医药集团')">查看</button></td>
+                        <td><button class="action-btn view" onclick="openSidePanel('广州医药集团')">查看</button></td>
                     </tr>
                     <tr>
                         <td>深圳医疗器械</td>
                         <td>ORG-004</td>
                         <td>¥45,200.00</td>
                         <td>2024-01-12 09:00</td>
-                        <td><button class="action-btn view" onclick="parent.openSidePanel('深圳医疗器械')">查看</button></td>
+                        <td><button class="action-btn view" onclick="openSidePanel('深圳医疗器械')">查看</button></td>
                     </tr>
                 </tbody>
             </table>
@@ -142,28 +142,28 @@
                         <td>GRP-001</td>
                         <td>¥45,600.00</td>
                         <td>2024-01-15 14:30</td>
-                        <td><button class="action-btn view" onclick="parent.openSidePanel('基因编辑课题组')">查看</button></td>
+                        <td><button class="action-btn view" onclick="openSidePanel('基因编辑课题组')">查看</button></td>
                     </tr>
                     <tr>
                         <td>蛋白质工程组</td>
                         <td>GRP-002</td>
                         <td>¥52,100.00</td>
                         <td>2024-01-14 10:15</td>
-                        <td><button class="action-btn view" onclick="parent.openSidePanel('蛋白质工程组')">查看</button></td>
+                        <td><button class="action-btn view" onclick="openSidePanel('蛋白质工程组')">查看</button></td>
                     </tr>
                     <tr>
                         <td>药物研发一组</td>
                         <td>GRP-003</td>
                         <td>¥98,200.00</td>
                         <td>2024-01-13 16:45</td>
-                        <td><button class="action-btn view" onclick="parent.openSidePanel('药物研发一组')">查看</button></td>
+                        <td><button class="action-btn view" onclick="openSidePanel('药物研发一组')">查看</button></td>
                     </tr>
                     <tr>
                         <td>细胞治疗组</td>
                         <td>GRP-004</td>
                         <td>¥28,400.00</td>
                         <td>2024-01-12 09:00</td>
-                        <td><button class="action-btn view" onclick="parent.openSidePanel('细胞治疗组')">查看</button></td>
+                        <td><button class="action-btn view" onclick="openSidePanel('细胞治疗组')">查看</button></td>
                     </tr>
                 </tbody>
             </table>
@@ -226,7 +226,7 @@
                         <td>张三</td>
                         <td>¥89,500.00</td>
                         <td>2024-01-15 14:30</td>
-                        <td><button class="action-btn view" onclick="parent.openSidePanel('北京华大基因')">查看</button></td>
+                        <td><button class="action-btn view" onclick="openSidePanel('北京华大基因')">查看</button></td>
                     </tr>
                     <tr>
                         <td>上海药明康德</td>
@@ -238,7 +238,7 @@
                         <td>李四</td>
                         <td>¥156,200.00</td>
                         <td>2024-01-14 10:15</td>
-                        <td><button class="action-btn view" onclick="parent.openSidePanel('上海药明康德')">查看</button></td>
+                        <td><button class="action-btn view" onclick="openSidePanel('上海药明康德')">查看</button></td>
                     </tr>
                     <tr>
                         <td>广州达安基因</td>
@@ -250,7 +250,7 @@
                         <td>王五</td>
                         <td>¥213,600.00</td>
                         <td>2024-01-13 16:45</td>
-                        <td><button class="action-btn view" onclick="parent.openSidePanel('广州达安基因')">查看</button></td>
+                        <td><button class="action-btn view" onclick="openSidePanel('广州达安基因')">查看</button></td>
                     </tr>
                     <tr>
                         <td>深圳华大智造</td>
@@ -262,7 +262,7 @@
                         <td>赵六</td>
                         <td>¥67,800.00</td>
                         <td>2024-01-12 09:00</td>
-                        <td><button class="action-btn view" onclick="parent.openSidePanel('深圳华大智造')">查看</button></td>
+                        <td><button class="action-btn view" onclick="openSidePanel('深圳华大智造')">查看</button></td>
                     </tr>
                 </tbody>
             </table>
@@ -292,6 +292,11 @@
     </div>
 
     <script>
+        /* ===== 桥接函数：通过 postMessage 通知父页面 ===== */
+        function openSidePanel(title) {
+            parent.postMessage({ action: 'openSidePanel', title: title }, '*');
+        }
+
         /* ===== 维度切换（页面专用） ===== */
         function switchDimension(dim) {
             document.querySelectorAll('.dimension-tab').forEach(function(t) {

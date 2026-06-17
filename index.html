@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>销售综合管理系统</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="axure-nav">
+            <div class="axure-header">页面导航</div>
+            <div class="axure-tree">
+                <div class="axure-module">
+                    <div class="axure-module-header" onclick="toggleAxureModule(this)">
+                        <span class="axure-arrow">▾</span>
+                        <span>需求概览</span>
+                    </div>
+                    <div class="axure-module-body">
+                        <div class="axure-page" data-axure-page="overview-intro" onclick="showAxurePage('overview-intro')">
+                            <span class="axure-page-icon">◇</span>
+                            <span>项目简介-简介</span>
+                        </div>
+                        <div class="axure-page" data-axure-page="overview-revision" onclick="showAxurePage('overview-revision')">
+                            <span class="axure-page-icon">◇</span>
+                            <span>项目简介-修订记录</span>
+                        </div>
+                        <div class="axure-page" data-axure-page="overview-history" onclick="showAxurePage('overview-history')">
+                            <span class="axure-page-icon">◇</span>
+                            <span>项目简介-历史数据</span>
+                        </div>
+                        <div class="axure-page" data-axure-page="overview-risk" onclick="showAxurePage('overview-risk')">
+                            <span class="axure-page-icon">◇</span>
+                            <span>项目简介-上线风险</span>
+                        </div>
+                        <div class="axure-page" data-axure-page="overview-acceptance" onclick="showAxurePage('overview-acceptance')">
+                            <span class="axure-page-icon">◇</span>
+                            <span>项目简介-验收重点</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="axure-module">
+                    <div class="axure-module-header" onclick="toggleAxureModule(this)">
+                        <span class="axure-arrow">▾</span>
+                        <span>需求正文</span>
+                    </div>
+                    <div class="axure-module-body">
+                        <div class="axure-module">
+                            <div class="axure-module-header" onclick="toggleAxureModule(this)">
+                                <span class="axure-arrow">▾</span>
+                                <span>业务场景&amp;流程</span>
+                            </div>
+                            <div class="axure-module-body">
+                                <div class="axure-page" data-axure-page="scene-v1" onclick="showAxurePage('scene-v1')">
+                                    <span class="axure-page-icon">◇</span>
+                                    <span>V1版本业务场景&amp;流程</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="axure-module">
+                            <div class="axure-module-header" onclick="toggleAxureModule(this)">
+                                <span class="axure-arrow">▾</span>
+                                <span>销综系统</span>
+                            </div>
+                            <div class="axure-module-body">
+                                <div class="axure-page" data-axure-page="unbilled" onclick="showAxurePage('unbilled')">
+                                    <span class="axure-page-icon">◇</span>
+                                    <span>未出账账单</span>
+                                </div>
+                                <div class="axure-page" data-axure-page="statement" onclick="showAxurePage('statement')">
+                                    <span class="axure-page-icon">◇</span>
+                                    <span>对账单</span>
+                                </div>
+                                <div class="axure-page" data-axure-page="config" onclick="showAxurePage('config')">
+                                    <span class="axure-page-icon">◇</span>
+                                    <span>对账要求配置</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="axure-module">
+                    <div class="axure-module-header" onclick="toggleAxureModule(this)">
+                        <span class="axure-arrow">▾</span>
+                        <span>回收站</span>
+                    </div>
+                    <div class="axure-module-body">
+                        <div class="axure-page" data-axure-page="recycle" onclick="showAxurePage('recycle')">
+                            <span class="axure-page-icon">◇</span>
+                            <span>回收站</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>销售综合管理系统</h1>
+            </div>
+            <nav class="nav-menu">
+                <div class="nav-item expanded">
+                    <div class="nav-item-header active" data-menu="billing">
+                        <span class="nav-icon">�</span>
+                        <span>账单管理</span>
+                        <span class="nav-arrow">›</span>
+                    </div>
+                    <div class="nav-submenu">
+                        <div class="nav-subitem active" data-submenu="unbilled">未出账账单</div>
+                        <div class="nav-subitem" data-submenu="statement">对账单</div>
+                        <div class="nav-subitem" data-submenu="config">对账要求配置</div>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="breadcrumbs">
+                    <a href="#">首页</a>
+                    <span>›</span>
+                    <a href="#">账单管理</a>
+                    <span>›</span>
+                    <span id="breadcrumb-current">未出账账单</span>
+                </div>
+                <div class="user-info">
+                    <div class="theme-toggle" id="themeToggle"></div>
+                    <span class="user-name">张三</span>
+                    <div class="user-avatar">Z</div>
+                </div>
+            </header>
+
+            <div class="page-container">
+                <iframe id="page-iframe" src="" frameborder="0" style="display:none;width:100%;border:none;"></iframe>
+
+                <!-- ===== 需求概览 - 项目简介-简介 ===== -->
+                <div id="page-overview-intro" class="page-content">
+                    <div class="page-header">
+                        <h2>项目简介-简介</h2>
+                    </div>
+                    <div class="config-card">
+                        <div class="config-card-header"><h4>项目以下模块是否需重点处理/关注</h4></div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>历史数据</th>
+                                    <th>订单金额/结算</th>
+                                    <th>上线风险</th>
+                                    <th>客户信息/U8/基础数据维护</th>
+                                    <th>待补充</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan="6" style="text-align:center;color:var(--text-light);padding:24px">暂无数据</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="config-card">
+                        <div class="config-card-header"><h4>项目人员</h4></div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>产品</th>
+                                    <th>项目</th>
+                                    <th>开发（前端）</th>
+                                    <th>开发（后端）</th>
+                                    <th>测试</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan="6" style="text-align:center;color:var(--text-light);padding:24px">暂无数据</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="config-card">
+                        <div class="config-card-header"><h4>名词释义</h4></div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>名词</th>
+                                    <th>名词描述</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan="3" style="text-align:center;color:var(--text-light);padding:24px">暂无数据</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="config-card">
+                        <div class="config-card-header"><h4>项目背景</h4></div>
+                        <div style="padding:24px;color:var(--text-light);text-align:center">暂无数据</div>
+                    </div>
+                </div>
+
+                <!-- ===== 需求概览 - 项目简介-修订记录 ===== -->
+                <div id="page-overview-revision" class="page-content" style="display: none;">
+                    <div class="page-header">
+                        <h2>项目简介-修订记录</h2>
+                    </div>
+                    <div class="config-card">
+                        <div class="config-card-header"><h4>文档修订记录</h4></div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>版本</th>
+                                    <th>修订记录</th>
+                                    <th>日期</th>
+                                    <th>修订记录</th>
+                                    <th>涉及页面</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan="5" style="text-align:center;color:var(--text-light);padding:24px">暂无数据</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ===== 需求概览 - 项目简介-历史数据 ===== -->
+                <div id="page-overview-history" class="page-content" style="display: none;">
+                    <div class="page-header">
+                        <h2>项目简介-历史数据</h2>
+                    </div>
+                    <div class="config-card">
+                        <div class="config-card-header"><h4>历史数据处理方案</h4></div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>数据类型</th>
+                                    <th>方案描述</th>
+                                    <th>备注</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan="4" style="text-align:center;color:var(--text-light);padding:24px">暂无数据</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ===== 需求概览 - 项目简介-上线风险 ===== -->
+                <div id="page-overview-risk" class="page-content" style="display: none;">
+                    <div class="page-header">
+                        <h2>项目简介-上线风险</h2>
+                    </div>
+                    <div class="config-card">
+                        <div class="config-card-header"><h4>上线风险点枚举</h4></div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>风险点</th>
+                                    <th>风险等级</th>
+                                    <th>风险描述</th>
+                                    <th>产生的影响</th>
+                                    <th>风险应对措施</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan="6" style="text-align:center;color:var(--text-light);padding:24px">暂无数据</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ===== 需求概览 - 项目简介-验收重点 ===== -->
+                <div id="page-overview-acceptance" class="page-content" style="display: none;">
+                    <div class="page-header">
+                        <h2>项目简介-验收重点</h2>
+                    </div>
+                    <div class="config-card">
+                        <div class="config-card-header"><h4>验收重点</h4></div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>需求名词</th>
+                                    <th>涉及模块/功能</th>
+                                    <th>验收重点描述</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan="4" style="text-align:center;color:var(--text-light);padding:24px">暂无数据</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ===== 需求正文 - V1版本业务场景&流程 ===== -->
+                <div id="page-scene-v1" class="page-content" style="display: none;">
+                    <div class="page-header">
+                        <h2>V1版本业务场景&amp;流程</h2>
+                    </div>
+
+                    <!-- 场景case表格 -->
+                    <div class="config-card">
+                        <div class="config-card-header"><h4>V1版本场景Case</h4></div>
+                        <table class="data-table auto-width-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:16%">场景</th>
+                                    <th style="width:34%">场景描述</th>
+                                    <th style="width:25%">目的</th>
+                                    <th style="width:25%">功能规划</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>客户对账要求配置<br><span style="font-size:12px;color:var(--text-light)">（差异化服务）</span></td>
+                                    <td>不同客户的对账周期、对账维度（按客户个人/课题组）、是否需要合并报账等需求各不相同，需提供灵活的配置能力</td>
+                                    <td>适配科研/工业客户的复杂报账需求，将客户要求标签化、系统化，提高流程自动化水平和工作效率</td>
+                                    <td>对账维度配置（客户个人/课题组、合并报账、报账对接人信息）、自动化配置（自动生成对账单开关、报账时间、凭证上传）</td>
+                                </tr>
+                                <tr>
+                                    <td>未出账账单查看<br><span style="font-size:12px;color:var(--text-light)">（预估与查询）</span></td>
+                                    <td>从下单发货到最终开票往往存在时间差，客户需要随时了解已发货未结算的潜在债务，以便做资金预算</td>
+                                    <td>减少客户因信息不对称反复电话咨询，帮助客户提前规划现金流，降低沟通成本</td>
+                                    <td>未出账账单系统自动生成、按单位/课题组/客户多维查看、详情导出</td>
+                                </tr>
+                                <tr>
+                                    <td>对账单生成与确认<br><span style="font-size:12px;color:var(--text-light)">（账期交易凭证）</span></td>
+                                    <td>公司经营模式多为先货后款，需在约定账期内完成对账确认和回款，保证资金流健康</td>
+                                    <td>降低应收周期、加快回款速度，留存对账确认凭证作为审计依据</td>
+                                    <td>对账单手动/自动生成、账单查看与导出、客户确认操作</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 流程图 -->
+                    <div class="config-card" style="overflow:auto">
+                        <div class="config-card-header"><h4>V1版本业务流程图</h4></div>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 660" style="width:100%;height:auto;min-width:1100px">
+                            <defs>
+                                <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#6366F1"/></marker>
+                                <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#94A3B8"/></marker>
+                                <linearGradient id="headBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#6366F1"/><stop offset="100%" stop-color="#06B6D4"/></linearGradient>
+                            </defs>
+
+                            <!-- 泳道背景 -->
+                            <rect x="0" y="0" width="1100" height="680" rx="10" fill="#F8FAFC"/>
+                            <!-- 泳道标题 -->
+                            <text x="130" y="32" text-anchor="middle" font-size="14" font-weight="600" fill="#64748B">商务</text>
+                            <text x="490" y="32" text-anchor="middle" font-size="14" font-weight="600" fill="#64748B">系统</text>
+                            <text x="850" y="32" text-anchor="middle" font-size="14" font-weight="600" fill="#64748B">客户</text>
+                            <!-- 泳道分隔线 -->
+                            <line x1="260" y1="42" x2="260" y2="660" stroke="#E2E8F0" stroke-width="1"/>
+                            <line x1="720" y1="42" x2="720" y2="660" stroke="#E2E8F0" stroke-width="1"/>
+
+                            <!-- ===== 行1: 对账要求配置 ===== -->
+                            <!-- 商务操作 -->
+                            <rect x="30" y="70" width="200" height="50" rx="8" fill="#6366F1" opacity="0.9"/>
+                            <text x="130" y="95" text-anchor="middle" font-size="13" fill="#fff" font-weight="500">配置对账要求</text>
+                            <text x="130" y="110" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.8)">对账维度、自动化、报账对接人</text>
+                            <!-- 连接线 商务→系统 -->
+                            <line x1="230" y1="95" x2="295" y2="95" stroke="#6366F1" stroke-width="2" marker-end="url(#arrow)"/>
+
+                            <!-- 系统操作 -->
+                            <rect x="300" y="70" width="380" height="50" rx="8" fill="#E8E8FF" stroke="#6366F1" stroke-width="1"/>
+                            <text x="490" y="95" text-anchor="middle" font-size="13" fill="#4F46E5" font-weight="500">保存并生效配置规则</text>
+                            <text x="490" y="110" text-anchor="middle" font-size="10" fill="#94A3B8">自动生成开关·报账周期·对账维度</text>
+
+                            <!-- 箭头 行1→行2 -->
+                            <line x1="490" y1="120" x2="490" y2="165" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrow2)" stroke-dasharray="4,3"/>
+
+                            <!-- ===== 行2: 未出账账单自动生成 ===== -->
+                            <text x="490" y="180" text-anchor="middle" font-size="12" fill="#94A3B8">订单审核通过进行中</text>
+                            <line x1="490" y1="190" x2="490" y2="205" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrow2)" stroke-dasharray="4,3"/>
+
+                            <rect x="300" y="210" width="380" height="50" rx="8" fill="#E8E8FF" stroke="#6366F1" stroke-width="1"/>
+                            <text x="490" y="235" text-anchor="middle" font-size="13" fill="#4F46E5" font-weight="500">自动生成到未出账账单</text>
+                            <text x="490" y="250" text-anchor="middle" font-size="10" fill="#94A3B8">按配置维度归集订单数据</text>
+
+                            <!-- 从系统分叉到商务、客户 -->
+                            <line x1="490" y1="260" x2="490" y2="280" stroke="#94A3B8" stroke-width="1.5"/>
+                            <line x1="130" y1="280" x2="850" y2="280" stroke="#94A3B8" stroke-width="1.5"/>
+                            <line x1="130" y1="280" x2="130" y2="305" stroke="#6366F1" stroke-width="2" marker-end="url(#arrow)"/>
+                            <line x1="850" y1="280" x2="850" y2="305" stroke="#6366F1" stroke-width="2" marker-end="url(#arrow)"/>
+
+                            <!-- 商务查看 -->
+                            <rect x="30" y="310" width="200" height="50" rx="8" fill="#EEF2FF" stroke="#6366F1" stroke-width="1"/>
+                            <text x="130" y="335" text-anchor="middle" font-size="13" fill="#4F46E5" font-weight="500">查看未出账账单</text>
+                            <text x="130" y="350" text-anchor="middle" font-size="10" fill="#94A3B8">单位/课题组/客户维度</text>
+
+                            <!-- 客户查看 -->
+                            <rect x="750" y="310" width="200" height="50" rx="8" fill="#EEF2FF" stroke="#6366F1" stroke-width="1"/>
+                            <text x="850" y="335" text-anchor="middle" font-size="13" fill="#4F46E5" font-weight="500">查看未出账账单</text>
+                            <text x="850" y="350" text-anchor="middle" font-size="10" fill="#94A3B8">门户查询、导出</text>
+
+                            <!-- 箭头 行2→行3 -->
+                            <line x1="130" y1="360" x2="490" y2="400" stroke="#6366F1" stroke-width="1.5" marker-end="url(#arrow)"/>
+                            <line x1="850" y1="360" x2="490" y2="400" stroke="#6366F1" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+                            <!-- ===== 行3: 对账单生成 ===== -->
+                            <text x="490" y="415" text-anchor="middle" font-size="12" fill="#94A3B8">对账周期到达 / 手动触发</text>
+                            <line x1="490" y1="425" x2="490" y2="440" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrow2)" stroke-dasharray="4,3"/>
+
+                            <rect x="300" y="445" width="380" height="50" rx="8" fill="#E8E8FF" stroke="#6366F1" stroke-width="1"/>
+                            <text x="490" y="470" text-anchor="middle" font-size="13" fill="#4F46E5" font-weight="500">生成对账单</text>
+                            <text x="490" y="485" text-anchor="middle" font-size="10" fill="#94A3B8">自动生成·手动添加订单</text>
+
+                            <!-- 分叉到商务和客户 -->
+                            <line x1="490" y1="495" x2="490" y2="515" stroke="#94A3B8" stroke-width="1.5"/>
+                            <line x1="130" y1="515" x2="850" y2="515" stroke="#94A3B8" stroke-width="1.5"/>
+                            <line x1="130" y1="515" x2="130" y2="535" stroke="#6366F1" stroke-width="2" marker-end="url(#arrow)"/>
+                            <line x1="850" y1="515" x2="850" y2="535" stroke="#6366F1" stroke-width="2" marker-end="url(#arrow)"/>
+
+                            <!-- 商务查看对账单 -->
+                            <rect x="30" y="540" width="200" height="44" rx="8" fill="#EEF2FF" stroke="#6366F1" stroke-width="1"/>
+                            <text x="130" y="562" text-anchor="middle" font-size="13" fill="#4F46E5" font-weight="500">商务查看对账单</text>
+                            <text x="130" y="576" text-anchor="middle" font-size="10" fill="#94A3B8">销综系统查看</text>
+
+                            <!-- 客户查看对账单 -->
+                            <rect x="750" y="540" width="200" height="44" rx="8" fill="#EEF2FF" stroke="#6366F1" stroke-width="1"/>
+                            <text x="850" y="562" text-anchor="middle" font-size="13" fill="#4F46E5" font-weight="500">客户查看对账单</text>
+                            <text x="850" y="576" text-anchor="middle" font-size="10" fill="#94A3B8">门户查看</text>
+
+                            <!-- 图例 -->
+                            <rect x="30" y="600" width="12" height="12" rx="3" fill="#6366F1"/>
+                            <text x="48" y="611" font-size="11" fill="#64748B">系统自动</text>
+                            <rect x="140" y="600" width="12" height="12" rx="3" fill="#EEF2FF" stroke="#6366F1" stroke-width="1"/>
+                            <text x="158" y="611" font-size="11" fill="#64748B">人工操作</text>
+                            <text x="260" y="611" font-size="11" fill="#94A3B8">— — 流程方向</text>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- ===== 回收站 ===== -->
+                <div id="page-recycle" class="page-content" style="display: none;">
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modal-title">新增账单</h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">取消</button>
+                <button class="btn btn-primary" onclick="saveModal()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 侧边详情面板 -->
+    <div class="side-panel-overlay" id="sidePanel" onclick="if(event.target===this)closeSidePanel()">
+        <div class="side-panel">
+            <div class="side-panel-header">
+                <h3>订单列表 - <span id="panel-title">北京科技有限公司</span></h3>
+                <button class="modal-close" onclick="closeSidePanel()">×</button>
+            </div>
+            <div class="side-panel-body">
+                <div class="filter-section" style="margin-bottom:16px;flex-shrink:0">
+                    <div class="filter-row" style="margin-bottom:0">
+                        <div class="filter-item">
+                            <label>订单状态</label>
+                            <select id="order-filter-status">
+                                <option value="">全部</option>
+                                <option value="in-progress">进行中</option>
+                                <option value="pending-receipt">待签收</option>
+                                <option value="pending-rate">待计算汇率</option>
+                                <option value="pending-confirm">待确认结单</option>
+                                <option value="completed">结单</option>
+                                <option value="cancelled">取消</option>
+                            </select>
+                        </div>
+                        <div class="filter-item">
+                            <label>客户</label>
+                            <select id="order-filter-customer">
+                                <option value="">全部</option>
+                                <option>北京华大基因</option>
+                                <option>上海药明康德</option>
+                                <option>广州达安基因</option>
+                                <option>深圳华大智造</option>
+                            </select>
+                        </div>
+                        <div class="filter-item">
+                            <label>开始日期</label>
+                            <input type="date" id="order-filter-date-start">
+                        </div>
+                        <div class="filter-item">
+                            <label>结束日期</label>
+                            <input type="date" id="order-filter-date-end">
+                        </div>
+                        <div class="filter-item">
+                            <label>&nbsp;</label>
+                            <div class="search-box">
+                                <input type="text" id="order-filter-search" placeholder="搜索订单号..." style="width:160px">
+                            </div>
+                        </div>
+                        <div class="filter-item" style="justify-content:flex-end">
+                            <label>&nbsp;</label>
+                            <button class="btn btn-primary" onclick="filterOrders()" style="height:38px">查询</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <div class="table-header">
+                        <div class="table-header-left">共 <span id="order-count">6</span> 条记录</div>
+                    </div>
+                    <div class="table-scroll">
+                        <table class="data-table" id="order-detail-table">
+                            <thead>
+                                <tr>
+                                    <th>订单号</th>
+                                    <th>订单状态</th>
+                                    <th>结算基地</th>
+                                    <th>客户</th>
+                                    <th>开票流程</th>
+                                    <th>追款人</th>
+                                    <th>业务员</th>
+                                    <th>订单日期</th>
+                                    <th>结单月份</th>
+                                    <th>发货地址</th>
+                                    <th>开票单位</th>
+                                    <th>订单类型</th>
+                                    <th>数量</th>
+                                    <th>折扣前含税单价</th>
+                                    <th>折扣后含税单价</th>
+                                    <th>折扣前含税总价</th>
+                                    <th>折扣金额</th>
+                                    <th>折扣后含税总价</th>
+                                    <th>计量单位</th>
+                                    <th>备注</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>ORD-2024-0156</td>
+                                    <td><span class="badge badge-in-progress">进行中</span></td>
+                                    <td>北京基地</td>
+                                    <td>北京华大基因</td>
+                                    <td>标准开票</td>
+                                    <td>李四</td>
+                                    <td>王五</td>
+                                    <td>2024-01-10</td>
+                                    <td>2024-01</td>
+                                    <td>北京市海淀区中关村</td>
+                                    <td>北京科技有限公司</td>
+                                    <td>标准订单</td>
+                                    <td>100</td>
+                                    <td>¥150.00</td>
+                                    <td>¥145.00</td>
+                                    <td>¥15,000.00</td>
+                                    <td>¥500.00</td>
+                                    <td>¥14,500.00</td>
+                                    <td>个</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>ORD-2024-0157</td>
+                                    <td><span class="badge badge-pending-receipt">待签收</span></td>
+                                    <td>上海基地</td>
+                                    <td>上海药明康德</td>
+                                    <td>急单开票</td>
+                                    <td>赵六</td>
+                                    <td>陈七</td>
+                                    <td>2024-01-11</td>
+                                    <td>2024-01</td>
+                                    <td>上海市浦东新区张江</td>
+                                    <td>上海生物科技</td>
+                                    <td>加急订单</td>
+                                    <td>50</td>
+                                    <td>¥280.00</td>
+                                    <td>¥260.00</td>
+                                    <td>¥14,000.00</td>
+                                    <td>¥1,000.00</td>
+                                    <td>¥13,000.00</td>
+                                    <td>件</td>
+                                    <td>需加急处理</td>
+                                </tr>
+                                <tr>
+                                    <td>ORD-2024-0158</td>
+                                    <td><span class="badge badge-pending-rate">待计算汇率</span></td>
+                                    <td>广州基地</td>
+                                    <td>广州达安基因</td>
+                                    <td>外币开票</td>
+                                    <td>周八</td>
+                                    <td>吴九</td>
+                                    <td>2024-01-12</td>
+                                    <td>2024-01</td>
+                                    <td>广州市黄埔区科学城</td>
+                                    <td>广州医药集团</td>
+                                    <td>外币订单</td>
+                                    <td>200</td>
+                                    <td>¥75.00</td>
+                                    <td>¥72.00</td>
+                                    <td>¥15,000.00</td>
+                                    <td>¥600.00</td>
+                                    <td>¥14,400.00</td>
+                                    <td>套</td>
+                                    <td>汇率待确认</td>
+                                </tr>
+                                <tr>
+                                    <td>ORD-2024-0159</td>
+                                    <td><span class="badge badge-pending-confirm">待确认结单</span></td>
+                                    <td>深圳基地</td>
+                                    <td>深圳华大智造</td>
+                                    <td>标准开票</td>
+                                    <td>郑十</td>
+                                    <td>钱十一</td>
+                                    <td>2024-01-13</td>
+                                    <td>2024-02</td>
+                                    <td>深圳市南山区科技园</td>
+                                    <td>深圳医疗器械</td>
+                                    <td>标准订单</td>
+                                    <td>30</td>
+                                    <td>¥520.00</td>
+                                    <td>¥500.00</td>
+                                    <td>¥15,600.00</td>
+                                    <td>¥600.00</td>
+                                    <td>¥15,000.00</td>
+                                    <td>台</td>
+                                    <td>客户确认中</td>
+                                </tr>
+                                <tr>
+                                    <td>ORD-2024-0160</td>
+                                    <td><span class="badge badge-completed">结单</span></td>
+                                    <td>北京基地</td>
+                                    <td>北京华大基因</td>
+                                    <td>标准开票</td>
+                                    <td>李四</td>
+                                    <td>王五</td>
+                                    <td>2024-01-05</td>
+                                    <td>2024-01</td>
+                                    <td>北京市昌平区生命园</td>
+                                    <td>北京科技有限公司</td>
+                                    <td>标准订单</td>
+                                    <td>80</td>
+                                    <td>¥200.00</td>
+                                    <td>¥195.00</td>
+                                    <td>¥16,000.00</td>
+                                    <td>¥400.00</td>
+                                    <td>¥15,600.00</td>
+                                    <td>个</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>ORD-2024-0161</td>
+                                    <td><span class="badge badge-cancelled">取消</span></td>
+                                    <td>上海基地</td>
+                                    <td>上海药明康德</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>陈七</td>
+                                    <td>2024-01-08</td>
+                                    <td>-</td>
+                                    <td>上海市徐汇区漕河泾</td>
+                                    <td>上海生物科技</td>
+                                    <td>标准订单</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>客户取消</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination">
+                        <span class="pagination-info">显示 1-6 条，共 6 条</span>
+                        <button disabled>‹</button>
+                        <button class="active">1</button>
+                        <button>›</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var sidePanelBodyHTML = '';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initNavigation();
+            initTableSorting();
+            initColumnToggle();
+            initThemeToggle();
+
+            sidePanelBodyHTML = document.querySelector('.side-panel-body').innerHTML;
+
+            showPage('overview-intro');
+        });
+
+        function initNavigation() {
+            var navItems = document.querySelectorAll('.nav-item-header');
+            navItems.forEach(function(item) {
+                item.addEventListener('click', function() {
+                    var menu = this.dataset.menu;
+                    
+                    document.querySelectorAll('.nav-item-header').forEach(function(el) {
+                        el.classList.remove('active');
+                    });
+                    this.classList.add('active');
+
+                    if (menu === 'billing') {
+                        this.parentElement.classList.add('expanded');
+                        showPage('unbilled');
+                        updateBreadcrumb('未出账账单');
+                    } else {
+                        document.querySelectorAll('.nav-item').forEach(function(el) {
+                            el.classList.remove('expanded');
+                        });
+                        document.querySelectorAll('.nav-subitem').forEach(function(el) {
+                            el.classList.remove('active');
+                        });
+                    }
+                });
+            });
+
+            var subItems = document.querySelectorAll('.nav-subitem');
+            subItems.forEach(function(item) {
+                item.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    document.querySelectorAll('.nav-subitem').forEach(function(el) {
+                        el.classList.remove('active');
+                    });
+                    this.classList.add('active');
+
+                    var submenu = this.dataset.submenu;
+                    showPage(submenu);
+                    
+                    var titles = {
+                        'unbilled': '未出账账单',
+                        'statement': '对账单',
+                        'config': '对账要求配置'
+                    };
+                    updateBreadcrumb(titles[submenu]);
+                });
+            });
+        }
+
+        function showPage(pageName) {
+            var iframe = document.getElementById('page-iframe');
+            var billingPages = ['unbilled', 'statement', 'config'];
+
+            if (billingPages.indexOf(pageName) !== -1) {
+                // 账单页面：隐藏内联内容，显示 iframe
+                document.querySelectorAll('.page-content').forEach(function(el) {
+                    el.style.display = 'none';
+                });
+                iframe.style.display = 'block';
+                var urls = { 'unbilled': 'unbilled.html', 'statement': 'reconciliation.html', 'config': 'config.html' };
+                if (!iframe.src || iframe.src.indexOf(urls[pageName]) === -1) {
+                    iframe.src = urls[pageName];
+                }
+            } else {
+                // 内容页面：隐藏 iframe，显示内联内容
+                iframe.style.display = 'none';
+                document.querySelectorAll('.page-content').forEach(function(el) {
+                    el.style.display = 'none';
+                });
+                document.getElementById('page-' + pageName).style.display = 'block';
+            }
+
+            // 更新 Axure 导航选中状态
+            document.querySelectorAll('.axure-page').forEach(function(el) {
+                el.classList.remove('active');
+            });
+            var axurePage = document.querySelector('.axure-page[data-axure-page="' + pageName + '"]');
+            if (axurePage) axurePage.classList.add('active');
+
+            // 控制左侧导航和顶部栏显隐
+            var hideNavPages = ['overview-intro', 'overview-revision', 'overview-history', 'overview-risk', 'overview-acceptance', 'scene-v1', 'recycle'];
+            document.querySelector('.app-container').classList.toggle('hide-nav', hideNavPages.indexOf(pageName) !== -1);
+
+            // 更新左侧 Sidebar 账单管理选中状态
+            var sidebarMap = { 'unbilled': 'unbilled', 'statement': 'statement', 'config': 'config' };
+            if (sidebarMap[pageName]) {
+                document.querySelectorAll('.nav-subitem').forEach(function(el) { el.classList.remove('active'); });
+                var si = document.querySelector('.nav-subitem[data-submenu="' + sidebarMap[pageName] + '"]');
+                if (si) si.classList.add('active');
+            }
+
+            // 更新面包屑
+            var titles = {
+                'unbilled': '未出账账单',
+                'statement': '对账单',
+                'config': '对账要求配置',
+                'overview-intro': '项目简介-简介',
+                'overview-revision': '项目简介-修订记录',
+                'overview-history': '项目简介-历史数据',
+                'overview-risk': '项目简介-上线风险',
+                'overview-acceptance': '项目简介-验收重点',
+                'scene-v1': 'V1版本业务场景&流程',
+                'recycle': '回收站'
+            };
+            document.getElementById('breadcrumb-current').textContent = titles[pageName] || pageName;
+        }
+
+        function updateBreadcrumb(title) {
+            document.getElementById('breadcrumb-current').textContent = title;
+        }
+
+        /* ===== Axure 导航交互 ===== */
+        function toggleAxureModule(header) {
+            header.parentElement.classList.toggle('collapsed');
+        }
+
+        function showAxurePage(pageName) {
+            showPage(pageName);
+        }
+
+        function initTableSorting() {
+            var tables = document.querySelectorAll('.data-table');
+            tables.forEach(function(table) {
+                var headers = table.querySelectorAll('th.sortable');
+                headers.forEach(function(header) {
+                    header.addEventListener('click', function() {
+                        var currentSort = this.dataset.sort;
+                        var currentOrder = this.classList.contains('sort-asc') ? 'desc' : 'asc';
+                        
+                        headers.forEach(function(h) {
+                            h.classList.remove('sort-asc', 'sort-desc');
+                        });
+                        
+                        this.classList.add('sort-' + currentOrder);
+                        alert('排序字段: ' + currentSort + ', 排序方式: ' + (currentOrder === 'asc' ? '升序' : '降序'));
+                    });
+                });
+            });
+        }
+
+        function initColumnToggle() {
+            var toggles = document.querySelectorAll('.columns-toggle');
+            toggles.forEach(function(toggle) {
+                toggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    this.classList.toggle('active');
+                });
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.columns-toggle')) {
+                    document.querySelectorAll('.columns-toggle').forEach(function(el) {
+                        el.classList.remove('active');
+                    });
+                }
+            });
+
+            var checkboxes = document.querySelectorAll('.column-checkbox input');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.addEventListener('change', function() {
+                    var colIndex = parseInt(this.id.split('-').pop()) - 1;
+                    var tableId = this.closest('.columns-dropdown').parentElement.id.replace('-columns-toggle', '-table');
+                    var table = document.getElementById(tableId);
+                    
+                    if (table) {
+                        var rows = table.querySelectorAll('tr');
+                        rows.forEach(function(row) {
+                            var cells = row.querySelectorAll('td, th');
+                            if (cells[colIndex]) {
+                                cells[colIndex].style.display = this.checked ? '' : 'none';
+                            }
+                        }.bind(this));
+                    }
+                });
+            });
+        }
+
+        function initThemeToggle() {
+            var toggle = document.getElementById('themeToggle');
+            toggle.addEventListener('click', function() {
+                this.classList.toggle('active');
+                alert('主题切换功能已触发（深色/浅色模式）');
+            });
+        }
+
+        function applyFilter(page) {
+            alert('应用筛选条件: ' + page);
+        }
+
+        function resetFilter(page) {
+            var inputs = document.querySelectorAll('[id^="' + page + '"]');
+            inputs.forEach(function(input) {
+                if (input.type === 'text' || input.type === 'date' || input.type === 'month') {
+                    input.value = '';
+                } else if (input.tagName === 'SELECT') {
+                    input.selectedIndex = 0;
+                }
+            });
+        }
+
+        function openModal(type) {
+            var modal = document.getElementById('modal');
+            var title = document.getElementById('modal-title');
+            var body = document.getElementById('modal-body');
+            
+            var titles = {
+                'add-unbilled': '新增未出账账单',
+                'edit-unbilled': '编辑未出账账单',
+                'view-unbilled': '查看未出账账单',
+                'add-statement': '生成对账单',
+                'edit-statement': '对账操作',
+                'view-statement': '查看对账单',
+            };
+            
+            title.textContent = titles[type];
+            
+            body.innerHTML = getModalContent(type);
+            modal.classList.add('active');
+        }
+
+        function getModalContent(type) {
+            var content = '';
+            
+            if (type.includes('unbilled')) {
+                content = `
+                    <div class="form-group">
+                        <label>账单号</label>
+                        <input type="text" placeholder="自动生成">
+                    </div>
+                    <div class="form-group">
+                        <label>客户名称</label>
+                        <select>
+                            <option>北京科技有限公司</option>
+                            <option>上海生物科技</option>
+                            <option>广州医药集团</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>金额</label>
+                        <input type="number" placeholder="请输入金额">
+                    </div>
+                    <div class="form-group">
+                        <label>日期</label>
+                        <input type="date">
+                    </div>
+                    <div class="form-group">
+                        <label>备注</label>
+                        <textarea placeholder="请输入备注信息"></textarea>
+                    </div>
+                `;
+            } else if (type.includes('statement')) {
+                content = `
+                    <div class="form-group">
+                        <label>对账单号</label>
+                        <input type="text" placeholder="自动生成">
+                    </div>
+                    <div class="form-group">
+                        <label>客户名称</label>
+                        <select>
+                            <option>北京科技有限公司</option>
+                            <option>上海生物科技</option>
+                            <option>广州医药集团</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>对账周期</label>
+                        <input type="month">
+                    </div>
+                    <div class="form-group">
+                        <label>对账状态</label>
+                        <select>
+                            <option>待对账</option>
+                            <option>已确认</option>
+                            <option>有争议</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>备注</label>
+                        <textarea placeholder="请输入对账备注"></textarea>
+                    </div>
+                `;
+            }
+            
+            return content;
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        function saveModal() {
+            alert('保存成功');
+            closeModal();
+        }
+
+        /* ===== 维度切换 ===== */
+        function switchDimension(dim) {
+            document.querySelectorAll('.dimension-tab').forEach(function(t) {
+                t.classList.remove('active');
+            });
+            document.querySelector('.dimension-tab[data-dimension="' + dim + '"]').classList.add('active');
+
+            document.querySelectorAll('.dimension-table').forEach(function(t) {
+                t.classList.remove('active');
+            });
+            document.getElementById('table-' + dim).classList.add('active');
+
+            var labels = {
+                'company': { label: '单位名称', title: '筛选条件' },
+                'group': { label: '课题组名称', title: '筛选条件' },
+                'customer': { label: '客户名称', title: '筛选条件' }
+            };
+            document.getElementById('dimension-filter-label').textContent = labels[dim].label;
+        }
+
+        /* ===== 侧边面板 ===== */
+        function openSidePanel(title) {
+            document.getElementById('panel-title').textContent = title;
+            document.getElementById('sidePanel').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSidePanel() {
+            document.getElementById('sidePanel').classList.remove('active');
+            document.body.style.overflow = '';
+            if (sidePanelBodyHTML) {
+                document.querySelector('.side-panel-body').innerHTML = sidePanelBodyHTML;
+            }
+        }
+
+        function filterOrders() {
+            var status = document.getElementById('order-filter-status').value;
+            var customer = document.getElementById('order-filter-customer').value;
+            var dateStart = document.getElementById('order-filter-date-start').value;
+            var dateEnd = document.getElementById('order-filter-date-end').value;
+            var keyword = document.getElementById('order-filter-search').value.toLowerCase();
+            var rows = document.querySelectorAll('#order-detail-table tbody tr');
+            var visibleCount = 0;
+
+            rows.forEach(function(row) {
+                var show = true;
+                if (status) {
+                    var badge = row.querySelector('.badge');
+                    var statusMap = {
+                        'in-progress': '进行中',
+                        'pending-receipt': '待签收',
+                        'pending-rate': '待计算汇率',
+                        'pending-confirm': '待确认结单',
+                        'completed': '结单',
+                        'cancelled': '取消'
+                    };
+                    if (badge && badge.textContent !== statusMap[status]) show = false;
+                }
+                if (show && customer) {
+                    var cells = row.querySelectorAll('td');
+                    if (cells[3] && cells[3].textContent !== customer) show = false;
+                }
+                if (show && dateStart) {
+                    var cells = row.querySelectorAll('td');
+                    if (cells[7] && cells[7].textContent < dateStart) show = false;
+                }
+                if (show && dateEnd) {
+                    var cells = row.querySelectorAll('td');
+                    if (cells[7] && cells[7].textContent > dateEnd) show = false;
+                }
+                if (show && keyword) {
+                    var cells = row.querySelectorAll('td');
+                    if (cells[0] && !cells[0].textContent.toLowerCase().includes(keyword)) show = false;
+                }
+                row.style.display = show ? '' : 'none';
+                if (show) visibleCount++;
+            });
+
+            document.getElementById('order-count').textContent = visibleCount;
+        }
+
+        /* ===== 对账单维度切换 ===== */
+        function switchStatementDimension(dim) {
+            var tabs = document.querySelectorAll('#page-statement .dimension-tab');
+            tabs.forEach(function(t) { t.classList.remove('active'); });
+            tabs.forEach(function(t) {
+                if (t.dataset.dimension === dim) t.classList.add('active');
+            });
+
+            var tables = document.querySelectorAll('#page-statement .dimension-table');
+            tables.forEach(function(t) { t.classList.remove('active'); });
+            document.getElementById('statement-table-' + dim).classList.add('active');
+
+            var labels = {
+                'company': '单位名称',
+                'group': '课题组名称',
+                'customer': '客户名称'
+            };
+            document.getElementById('dimension-filter-label-statement').textContent = labels[dim];
+        }
+
+        /* ===== 对账单侧边面板 ===== */
+        function openStatementSidePanel(title) {
+            document.getElementById('panel-title').textContent = title;
+            document.querySelector('.side-panel-header h3').textContent = '订单列表 - ' + title;
+            document.getElementById('sidePanel').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        /* ===== 对账单全选勾选框 ===== */
+        function toggleAllStatementCheckbox(master) {
+            var checkboxes = document.querySelectorAll('#page-statement .statement-checkbox');
+            checkboxes.forEach(function(cb) { cb.checked = master.checked; });
+        }
+
+        /* ===== 配置修改侧边面板 ===== */
+        function openConfigSidePanel(groupId) {
+            var panel = document.getElementById('sidePanel');
+            document.querySelector('.side-panel-header h3').textContent = '修改配置 - ' + groupId;
+            var body = document.querySelector('.side-panel-body');
+            body.innerHTML = `
+                <div class="config-edit-form">
+                    <div class="config-edit-section">
+                        <h4>对账维度配置</h4>
+                        <div class="dimension-radio-group">
+                            <label><input type="radio" name="dimension" value="individual" onchange="toggleDimensionSub(this)"> 按客户个人</label>
+                            <label><input type="radio" name="dimension" value="group" checked onchange="toggleDimensionSub(this)"> 按课题组</label>
+                        </div>
+                        <div class="dimension-sub-section" id="dim-sub-individual">
+                            <div class="sub-header">报账人信息</div>
+                            <div class="form-group">
+                                <label>报账人姓名</label>
+                                <input type="text" placeholder="请输入报账人姓名">
+                            </div>
+                            <div class="form-group">
+                                <label>联系方式</label>
+                                <input type="text" placeholder="请输入联系方式">
+                            </div>
+                            <div class="form-group">
+                                <label>邮箱</label>
+                                <input type="email" placeholder="请输入邮箱地址">
+                            </div>
+                            <div class="form-group">
+                                <label>详细地址</label>
+                                <input type="text" placeholder="请输入详细地址">
+                            </div>
+                            <div style="margin-top:12px">
+                                <button class="add-row-btn" onclick="alert('添加合并报账客户')">+ 添加其他合并报账客户</button>
+                            </div>
+                        </div>
+                        <div class="dimension-sub-section active" id="dim-sub-group">
+                            <div class="sub-header">报账人信息</div>
+                            <div class="form-group">
+                                <label>报账人姓名</label>
+                                <input type="text" placeholder="请输入报账人姓名" value="张会计">
+                            </div>
+                            <div class="form-group">
+                                <label>联系方式</label>
+                                <input type="text" placeholder="请输入联系方式" value="13800000001">
+                            </div>
+                            <div class="form-group">
+                                <label>邮箱</label>
+                                <input type="email" placeholder="请输入邮箱地址" value="zhang@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label>详细地址</label>
+                                <input type="text" placeholder="请输入详细地址" value="北京市海淀区中关村大街1号">
+                            </div>
+                            <div style="margin-top:12px">
+                                <button class="add-row-btn" onclick="alert('添加合并报账课题组')">+ 添加其他合并报账课题组</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="config-edit-footer">
+                        <button class="btn btn-secondary" onclick="closeSidePanel()">取消</button>
+                        <button class="btn btn-primary" onclick="alert('保存成功');closeSidePanel()">保存</button>
+                    </div>
+                </div>
+            `;
+            panel.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function toggleDimensionSub(radio) {
+            document.getElementById('dim-sub-individual').classList.toggle('active', radio.value === 'individual');
+            document.getElementById('dim-sub-group').classList.toggle('active', radio.value === 'group');
+        }
+
+        /* ===== 修改记录悬浮框 ===== */
+        function toggleModifyRecord(el) {
+            el.classList.toggle('active');
+        }
+
+        /* 点击其他区域关闭修改记录悬浮框 */
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.modify-record-trigger')) {
+                document.querySelectorAll('.modify-record-trigger.active').forEach(function(el) {
+                    el.classList.remove('active');
+                });
+            }
+        });
+
+        /* ===== 键盘快捷键: ESC 关闭面板 ===== */
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeSidePanel();
+        });
+
+        /* ===== iframe 自适应高度 ===== */
+        window.addEventListener('message', function(e) {
+            if (e.data && e.data.iframeHeight) {
+                var iframe = document.getElementById('page-iframe');
+                iframe.style.height = e.data.iframeHeight + 'px';
+            }
+        });
+    </script>
+</body>
+</html>

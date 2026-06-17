@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>未出账账单</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body style="overflow:auto;background:transparent">
+    <div class="page-header">
+        <h2>未出账账单</h2>
+        <p>管理待出账的账单数据，支持从不同维度查看和操作</p>
+    </div>
+
+    <div class="dimension-tabs">
+        <button class="dimension-tab active" data-dimension="company" onclick="switchDimension('company')">单位维度</button>
+        <button class="dimension-tab" data-dimension="group" onclick="switchDimension('group')">课题组维度</button>
+        <button class="dimension-tab" data-dimension="customer" onclick="switchDimension('customer')">客户维度</button>
+    </div>
+
+    <div class="filter-section">
+        <div class="filter-row">
+            <div class="filter-item">
+                <label id="dimension-filter-label">单位名称</label>
+                <select id="unbilled-filter-1">
+                    <option value="">全部</option>
+                    <option value="1">北京科技有限公司</option>
+                    <option value="2">上海生物科技</option>
+                    <option value="3">广州医药集团</option>
+                </select>
+            </div>
+            <div class="filter-item">
+                <label>日期范围</label>
+                <input type="date" id="unbilled-date-start">
+            </div>
+            <div class="filter-item">
+                <label>至</label>
+                <input type="date" id="unbilled-date-end">
+            </div>
+        </div>
+        <div class="filter-actions" style="display:flex;gap:10px;justify-content:flex-end">
+            <button class="btn btn-outline" onclick="parent.resetFilter('unbilled')">重置</button>
+            <button class="btn btn-primary" onclick="parent.applyFilter('unbilled')">查询</button>
+        </div>
+    </div>
+
+    <!-- 单位维度表格 -->
+    <div class="dimension-table active" id="table-company">
+        <div class="table-container">
+            <div class="table-header">
+                <div class="table-header-left">共 <span id="company-count">4</span> 条记录</div>
+                <div class="table-header-right">
+                </div>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>单位名称</th>
+                        <th>单位ID</th>
+                        <th>账单含税金额</th>
+                        <th>更新时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>北京科技有限公司</td>
+                        <td>ORG-001</td>
+                        <td>¥125,800.00</td>
+                        <td>2024-01-15 14:30</td>
+                        <td><button class="action-btn view" onclick="parent.openSidePanel('北京科技有限公司')">查看</button></td>
+                    </tr>
+                    <tr>
+                        <td>上海生物科技</td>
+                        <td>ORG-002</td>
+                        <td>¥86,200.00</td>
+                        <td>2024-01-14 10:15</td>
+                        <td><button class="action-btn view" onclick="parent.openSidePanel('上海生物科技')">查看</button></td>
+                    </tr>
+                    <tr>
+                        <td>广州医药集团</td>
+                        <td>ORG-003</td>
+                        <td>¥156,300.00</td>
+                        <td>2024-01-13 16:45</td>
+                        <td><button class="action-btn view" onclick="parent.openSidePanel('广州医药集团')">查看</button></td>
+                    </tr>
+                    <tr>
+                        <td>深圳医疗器械</td>
+                        <td>ORG-004</td>
+                        <td>¥45,200.00</td>
+                        <td>2024-01-12 09:00</td>
+                        <td><button class="action-btn view" onclick="parent.openSidePanel('深圳医疗器械')">查看</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="pagination" style="justify-content:flex-end">
+                <div class="pagination-right">
+                    <span class="page-size-label">每页</span>
+                    <select class="page-size-select">
+                        <option>10</option>
+                        <option selected>20</option>
+                        <option>50</option>
+                    </select>
+                    <span class="page-size-label">条</span>
+                    <span class="pagination-divider">|</span>
+                    <span class="pagination-info">1-4 / 4</span>
+                    <span class="pagination-divider">|</span>
+                    <button class="page-btn" disabled>‹</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">›</button>
+                    <span class="pagination-divider">|</span>
+                    <span class="page-size-label">跳至</span>
+                    <input type="text" class="page-jump-input" value="1">
+                    <span class="page-size-label">页</span>
+                    <button class="btn btn-primary page-jump-btn">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 课题组维度表格 -->
+    <div class="dimension-table" id="table-group">
+        <div class="table-container">
+            <div class="table-header">
+                <div class="table-header-left">共 <span id="group-count">4</span> 条记录</div>
+                <div class="table-header-right">
+                </div>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>课题组</th>
+                        <th>课题组ID</th>
+                        <th>账单含税金额</th>
+                        <th>更新时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>基因编辑课题组</td>
+                        <td>GRP-001</td>
+                        <td>¥45,600.00</td>
+                        <td>2024-01-15 14:30</td>
+                        <td><button class="action-btn view" onclick="parent.openSidePanel('基因编辑课题组')">查看</button></td>
+                    </tr>
+                    <tr>
+                        <td>蛋白质工程组</td>
+                        <td>GRP-002</td>
+                        <td>¥52,100.00</td>
+                        <td>2024-01-14 10:15</td>
+                        <td><button class="action-btn view" onclick="parent.openSidePanel('蛋白质工程组')">查看</button></td>
+                    </tr>
+                    <tr>
+                        <td>药物研发一组</td>
+                        <td>GRP-003</td>
+                        <td>¥98,200.00</td>
+                        <td>2024-01-13 16:45</td>
+                        <td><button class="action-btn view" onclick="parent.openSidePanel('药物研发一组')">查看</button></td>
+                    </tr>
+                    <tr>
+                        <td>细胞治疗组</td>
+                        <td>GRP-004</td>
+                        <td>¥28,400.00</td>
+                        <td>2024-01-12 09:00</td>
+                        <td><button class="action-btn view" onclick="parent.openSidePanel('细胞治疗组')">查看</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="pagination" style="justify-content:flex-end">
+                <div class="pagination-right">
+                    <span class="page-size-label">每页</span>
+                    <select class="page-size-select">
+                        <option>10</option>
+                        <option selected>20</option>
+                        <option>50</option>
+                    </select>
+                    <span class="page-size-label">条</span>
+                    <span class="pagination-divider">|</span>
+                    <span class="pagination-info">1-4 / 4</span>
+                    <span class="pagination-divider">|</span>
+                    <button class="page-btn" disabled>‹</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">›</button>
+                    <span class="pagination-divider">|</span>
+                    <span class="page-size-label">跳至</span>
+                    <input type="text" class="page-jump-input" value="1">
+                    <span class="page-size-label">页</span>
+                    <button class="btn btn-primary page-jump-btn">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 客户维度表格 -->
+    <div class="dimension-table" id="table-customer">
+        <div class="table-container">
+            <div class="table-header">
+                <div class="table-header-left">共 <span id="customer-count">4</span> 条记录</div>
+                <div class="table-header-right">
+                </div>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>客户</th>
+                        <th>客户ID</th>
+                        <th>课题组</th>
+                        <th>课题组ID</th>
+                        <th>单位名称</th>
+                        <th>单位ID</th>
+                        <th>业务员</th>
+                        <th>账单含税金额</th>
+                        <th>更新时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>北京华大基因</td>
+                        <td>CUS-001</td>
+                        <td>基因编辑课题组</td>
+                        <td>GRP-001</td>
+                        <td>北京科技有限公司</td>
+                        <td>ORG-001</td>
+                        <td>张三</td>
+                        <td>¥89,500.00</td>
+                        <td>2024-01-15 14:30</td>
+                        <td><button class="action-btn view" onclick="parent.openSidePanel('北京华大基因')">查看</button></td>
+                    </tr>
+                    <tr>
+                        <td>上海药明康德</td>
+                        <td>CUS-002</td>
+                        <td>蛋白质工程组</td>
+                        <td>GRP-002</td>
+                        <td>上海生物科技</td>
+                        <td>ORG-002</td>
+                        <td>李四</td>
+                        <td>¥156,200.00</td>
+                        <td>2024-01-14 10:15</td>
+                        <td><button class="action-btn view" onclick="parent.openSidePanel('上海药明康德')">查看</button></td>
+                    </tr>
+                    <tr>
+                        <td>广州达安基因</td>
+                        <td>CUS-003</td>
+                        <td>药物研发一组</td>
+                        <td>GRP-003</td>
+                        <td>广州医药集团</td>
+                        <td>ORG-003</td>
+                        <td>王五</td>
+                        <td>¥213,600.00</td>
+                        <td>2024-01-13 16:45</td>
+                        <td><button class="action-btn view" onclick="parent.openSidePanel('广州达安基因')">查看</button></td>
+                    </tr>
+                    <tr>
+                        <td>深圳华大智造</td>
+                        <td>CUS-004</td>
+                        <td>细胞治疗组</td>
+                        <td>GRP-004</td>
+                        <td>深圳医疗器械</td>
+                        <td>ORG-004</td>
+                        <td>赵六</td>
+                        <td>¥67,800.00</td>
+                        <td>2024-01-12 09:00</td>
+                        <td><button class="action-btn view" onclick="parent.openSidePanel('深圳华大智造')">查看</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="pagination" style="justify-content:flex-end">
+                <div class="pagination-right">
+                    <span class="page-size-label">每页</span>
+                    <select class="page-size-select">
+                        <option>10</option>
+                        <option selected>20</option>
+                        <option>50</option>
+                    </select>
+                    <span class="page-size-label">条</span>
+                    <span class="pagination-divider">|</span>
+                    <span class="pagination-info">1-4 / 4</span>
+                    <span class="pagination-divider">|</span>
+                    <button class="page-btn" disabled>‹</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">›</button>
+                    <span class="pagination-divider">|</span>
+                    <span class="page-size-label">跳至</span>
+                    <input type="text" class="page-jump-input" value="1">
+                    <span class="page-size-label">页</span>
+                    <button class="btn btn-primary page-jump-btn">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* ===== 维度切换（页面专用） ===== */
+        function switchDimension(dim) {
+            document.querySelectorAll('.dimension-tab').forEach(function(t) {
+                t.classList.remove('active');
+            });
+            document.querySelector('.dimension-tab[data-dimension="' + dim + '"]').classList.add('active');
+
+            document.querySelectorAll('.dimension-table').forEach(function(t) {
+                t.classList.remove('active');
+            });
+            document.getElementById('table-' + dim).classList.add('active');
+
+            var labels = {
+                'company': { label: '单位名称', title: '筛选条件' },
+                'group': { label: '课题组名称', title: '筛选条件' },
+                'customer': { label: '客户名称', title: '筛选条件' }
+            };
+            document.getElementById('dimension-filter-label').textContent = labels[dim].label;
+        }
+
+        /* ===== postMessage 自适应高度 ===== */
+        function sendHeight() {
+            var h = document.documentElement.scrollHeight;
+            parent.postMessage({ iframeHeight: h }, '*');
+        }
+        window.addEventListener('load', sendHeight);
+        window.addEventListener('resize', sendHeight);
+    </script>
+</body>
+</html>

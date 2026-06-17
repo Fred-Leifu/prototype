@@ -1782,6 +1782,10 @@ body {
     right: 0;
 }
 
+.side-panel-wide {
+    width: 90%;
+}
+
 .side-panel-header {
     display: flex;
     align-items: center;

@@ -744,6 +744,126 @@
         </div>
     </div>
 
+    <!-- 对账单详情侧面板 -->
+    <div class="side-panel-overlay" id="statementDetailPanel" onclick="if(event.target===this)closeStatementDetailPanel()">
+        <div class="side-panel side-panel-wide">
+            <div class="side-panel-header">
+                <h3>对账单详情 - <span id="st-panel-title">BILL-001</span></h3>
+                <button class="modal-close" onclick="closeStatementDetailPanel()">×</button>
+            </div>
+            <div class="side-panel-body">
+                <div class="filter-section" style="margin-bottom:16px;flex-shrink:0">
+                    <div class="filter-row" style="margin-bottom:0">
+                        <div class="filter-item">
+                            <label>订单状态</label>
+                            <select id="st-order-filter-status">
+                                <option value="">全部</option>
+                                <option value="in-progress">进行中</option>
+                                <option value="pending-receipt">待签收</option>
+                                <option value="pending-rate">待计算汇率</option>
+                                <option value="pending-confirm">待确认结单</option>
+                                <option value="completed">结单</option>
+                                <option value="cancelled">取消</option>
+                            </select>
+                        </div>
+                        <div class="filter-item">
+                            <label>客户</label>
+                            <select id="st-order-filter-customer">
+                                <option value="">全部</option>
+                                <option>北京华大基因</option>
+                                <option>上海药明康德</option>
+                                <option>广州达安基因</option>
+                                <option>深圳华大智造</option>
+                            </select>
+                        </div>
+                        <div class="filter-item">
+                            <label>日期范围</label>
+                            <input type="date" id="st-order-filter-date-start">
+                        </div>
+                        <div class="filter-item">
+                            <label>至</label>
+                            <input type="date" id="st-order-filter-date-end">
+                        </div>
+                        <div class="filter-item">
+                            <label>&nbsp;</label>
+                            <div class="search-box">
+                                <input type="text" id="st-order-filter-search" placeholder="搜索订单号..." style="width:160px">
+                            </div>
+                        </div>
+                        <div class="filter-item" style="justify-content:flex-end">
+                            <label>&nbsp;</label>
+                            <button class="btn btn-primary" onclick="filterStatementOrders()" style="height:38px">查询</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <div class="table-header">
+                        <div class="table-header-left">共 <span id="st-order-count">4</span> 条记录</div>
+                    </div>
+                    <div class="table-scroll">
+                        <table class="data-table" id="st-order-detail-table">
+                            <thead>
+                                <tr>
+                                    <th>订单号</th>
+                                    <th>订单状态</th>
+                                    <th>对账状态</th>
+                                    <th>订单类型</th>
+                                    <th>客户</th>
+                                    <th>订单日期</th>
+                                    <th>折扣后含税总价</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>ORD-2026-0101</td>
+                                    <td><span class="badge badge-completed">结单</span></td>
+                                    <td><span class="badge badge-success">已对账</span></td>
+                                    <td>服务</td>
+                                    <td>北京华大基因</td>
+                                    <td>2026-01-15</td>
+                                    <td>¥45,000.00</td>
+                                </tr>
+                                <tr>
+                                    <td>ORD-2026-0102</td>
+                                    <td><span class="badge badge-completed">结单</span></td>
+                                    <td><span class="badge badge-success">已对账</span></td>
+                                    <td>服务</td>
+                                    <td>北京华大基因</td>
+                                    <td>2026-02-20</td>
+                                    <td>¥38,500.00</td>
+                                </tr>
+                                <tr>
+                                    <td>ORD-2026-0103</td>
+                                    <td><span class="badge badge-pending-confirm">待确认结单</span></td>
+                                    <td><span class="badge badge-warning">待对账</span></td>
+                                    <td>产品</td>
+                                    <td>上海药明康德</td>
+                                    <td>2026-03-10</td>
+                                    <td>¥22,300.00</td>
+                                </tr>
+                                <tr>
+                                    <td>ORD-2026-0104</td>
+                                    <td><span class="badge badge-in-progress">进行中</span></td>
+                                    <td><span class="badge badge-info">未入账</span></td>
+                                    <td>产品</td>
+                                    <td>广州达安基因</td>
+                                    <td>2026-03-25</td>
+                                    <td>¥15,000.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination">
+                        <span class="pagination-info">显示 1-4 条，共 4 条</span>
+                        <button disabled>‹</button>
+                        <button class="active">1</button>
+                        <button>›</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         var sidePanelBodyHTML = '';
         var _mergeRowCounter = 0;
@@ -1087,6 +1207,64 @@
             if (sidePanelBodyHTML) {
                 document.querySelector('.side-panel-body').innerHTML = sidePanelBodyHTML;
             }
+        }
+
+        /* ===== 对账单详情侧边面板 ===== */
+        function openStatementDetailPanel(billId) {
+            document.getElementById('st-panel-title').textContent = billId;
+            document.getElementById('statementDetailPanel').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeStatementDetailPanel() {
+            document.getElementById('statementDetailPanel').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function filterStatementOrders() {
+            var status = document.getElementById('st-order-filter-status').value;
+            var customer = document.getElementById('st-order-filter-customer').value;
+            var dateStart = document.getElementById('st-order-filter-date-start').value;
+            var dateEnd = document.getElementById('st-order-filter-date-end').value;
+            var keyword = document.getElementById('st-order-filter-search').value.toLowerCase();
+            var rows = document.querySelectorAll('#st-order-detail-table tbody tr');
+            var visibleCount = 0;
+
+            rows.forEach(function(row) {
+                var show = true;
+                if (status) {
+                    var badge = row.querySelector('.badge');
+                    var statusMap = {
+                        'in-progress': '进行中',
+                        'pending-receipt': '待签收',
+                        'pending-rate': '待计算汇率',
+                        'pending-confirm': '待确认结单',
+                        'completed': '结单',
+                        'cancelled': '取消'
+                    };
+                    if (badge && badge.textContent !== statusMap[status]) show = false;
+                }
+                if (show && customer) {
+                    var cells = row.querySelectorAll('td');
+                    if (cells[4] && cells[4].textContent !== customer) show = false;
+                }
+                if (show && dateStart) {
+                    var cells = row.querySelectorAll('td');
+                    if (cells[5] && cells[5].textContent < dateStart) show = false;
+                }
+                if (show && dateEnd) {
+                    var cells = row.querySelectorAll('td');
+                    if (cells[5] && cells[5].textContent > dateEnd) show = false;
+                }
+                if (show && keyword) {
+                    var cells = row.querySelectorAll('td');
+                    if (cells[0] && !cells[0].textContent.toLowerCase().includes(keyword)) show = false;
+                }
+                row.style.display = show ? '' : 'none';
+                if (show) visibleCount++;
+            });
+
+            document.getElementById('st-order-count').textContent = visibleCount;
         }
 
         function filterOrders() {
@@ -1448,6 +1626,9 @@
             }
             if (e.data && e.data.action === 'openConfigSidePanel') {
                 openConfigSidePanel(e.data.groupId);
+            }
+            if (e.data && e.data.action === 'openStatementDetailPanel') {
+                openStatementDetailPanel(e.data.billId);
             }
         });
 

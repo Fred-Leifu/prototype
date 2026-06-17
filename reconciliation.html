@@ -48,6 +48,13 @@
                 <tr>
                     <th style="width:40px"><input type="checkbox" onchange="toggleAllCheckbox(this)"></th>
                     <th>账单ID</th>
+                    <th>账单金额</th>
+                    <th>账单周期</th>
+                    <th>账单状态</th>
+                    <th>开票状态</th>
+                    <th>回款状态</th>
+                    <th>关联预付发票号</th>
+                    <th>回款金额</th>
                     <th>账单维度</th>
                     <th>账单类型</th>
                     <th>报账人姓名</th>
@@ -56,12 +63,21 @@
                     <th>单位名称</th>
                     <th>课题组</th>
                     <th>客户</th>
+                    <th>生成时间</th>
+                    <th>更新时间</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td><input type="checkbox" class="row-checkbox"></td>
-                    <td>BILL-001</td>
+                    <td style="cursor:pointer;color:var(--primary-color)" onclick="openDetailPanel('BILL-001')">BILL-001</td>
+                    <td>¥125,800.00</td>
+                    <td>2026-01-01 ~ 2026-03-31</td>
+                    <td><span class="badge badge-warning">待对账</span></td>
+                    <td><span class="badge badge-warning">待开票</span></td>
+                    <td><span class="badge badge-danger">待回款</span></td>
+                    <td>INV-2026-001</td>
+                    <td>¥0.00</td>
                     <td>课题组</td>
                     <td>服务</td>
                     <td>张会计</td>
@@ -70,10 +86,19 @@
                     <td>北京科技有限公司</td>
                     <td><span class="badge badge-info" style="margin:2px">基因编辑课题组</span><span class="badge badge-info" style="margin:2px">蛋白质工程组</span></td>
                     <td>北京华大基因</td>
+                    <td>2026-04-01 10:00</td>
+                    <td>2026-04-15 14:30</td>
                 </tr>
                 <tr>
                     <td><input type="checkbox" class="row-checkbox"></td>
-                    <td>BILL-002</td>
+                    <td style="cursor:pointer;color:var(--primary-color)" onclick="openDetailPanel('BILL-002')">BILL-002</td>
+                    <td>¥86,200.00</td>
+                    <td>2026-02-01 ~ 2026-04-30</td>
+                    <td><span class="badge badge-success">已对账</span></td>
+                    <td><span class="badge badge-info">开票中</span></td>
+                    <td><span class="badge badge-warning">部分回款</span></td>
+                    <td>INV-2026-002</td>
+                    <td>¥40,000.00</td>
                     <td>客户</td>
                     <td>产品</td>
                     <td>李会计</td>
@@ -82,10 +107,19 @@
                     <td>上海生物科技</td>
                     <td>蛋白质工程组</td>
                     <td><span class="badge badge-info" style="margin:2px">上海药明康德</span><span class="badge badge-info" style="margin:2px">广州达安基因</span></td>
+                    <td>2026-05-01 09:30</td>
+                    <td>2026-05-10 16:45</td>
                 </tr>
                 <tr>
                     <td><input type="checkbox" class="row-checkbox"></td>
-                    <td>BILL-003</td>
+                    <td style="cursor:pointer;color:var(--primary-color)" onclick="openDetailPanel('BILL-003')">BILL-003</td>
+                    <td>¥213,600.00</td>
+                    <td>2026-03-01 ~ 2026-05-31</td>
+                    <td><span class="badge badge-warning">待对账</span></td>
+                    <td><span class="badge badge-success">已开票</span></td>
+                    <td><span class="badge badge-success">已全部回款</span></td>
+                    <td>INV-2026-003</td>
+                    <td>¥213,600.00</td>
                     <td>课题组</td>
                     <td>服务</td>
                     <td>王会计</td>
@@ -94,10 +128,19 @@
                     <td>广州医药集团</td>
                     <td><span class="badge badge-info" style="margin:2px">药物研发一组</span><span class="badge badge-info" style="margin:2px">细胞治疗组</span></td>
                     <td><span class="badge badge-info" style="margin:2px">广州达安基因</span><span class="badge badge-info" style="margin:2px">深圳华大智造</span></td>
+                    <td>2026-06-01 11:00</td>
+                    <td>2026-06-10 09:15</td>
                 </tr>
                 <tr>
                     <td><input type="checkbox" class="row-checkbox"></td>
-                    <td>BILL-004</td>
+                    <td style="cursor:pointer;color:var(--primary-color)" onclick="openDetailPanel('BILL-004')">BILL-004</td>
+                    <td>¥67,800.00</td>
+                    <td>2026-04-01 ~ 2026-06-30</td>
+                    <td><span class="badge badge-success">已对账</span></td>
+                    <td><span class="badge badge-warning">待开票</span></td>
+                    <td><span class="badge badge-danger">待回款</span></td>
+                    <td>-</td>
+                    <td>¥0.00</td>
                     <td>客户</td>
                     <td>产品</td>
                     <td>赵会计</td>
@@ -106,6 +149,8 @@
                     <td>深圳医疗器械</td>
                     <td>基因编辑课题组</td>
                     <td>北京华大基因</td>
+                    <td>2026-07-01 08:00</td>
+                    <td>2026-07-05 13:20</td>
                 </tr>
             </tbody>
         </table>
@@ -221,8 +266,14 @@
             }
         });
 
+        /* ===== 全选勾选框 ===== */
         function toggleAllCheckbox(master) {
             document.querySelectorAll('.row-checkbox').forEach(function(cb) { cb.checked = master.checked; });
+        }
+
+        /* ===== 对账单详情侧面板 ===== */
+        function openDetailPanel(billId) {
+            parent.postMessage({ action: 'openStatementDetailPanel', billId: billId }, '*');
         }
 
         function sendHeight() {

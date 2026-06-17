@@ -7,11 +7,6 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body style="overflow:auto;background:transparent">
-    <div class="page-header">
-        <h2>账单配置</h2>
-        <p>配置对账规则和要求，确保对账流程标准化</p>
-    </div>
-
     <div class="filter-section">
         <div class="filter-row">
             <div class="filter-item">
@@ -37,10 +32,10 @@
                 <label>至</label>
                 <input type="date" id="config-date-end">
             </div>
-        </div>
-        <div class="filter-actions" style="display:flex;gap:10px;justify-content:flex-end">
-            <button class="btn btn-outline" onclick="parent.resetFilter('config')">重置</button>
-            <button class="btn btn-primary" onclick="parent.applyFilter('config')">查询</button>
+            <div class="filter-item" style="flex-direction:row;align-items:flex-end;gap:8px">
+                <button class="btn btn-outline" onclick="parent.resetFilter('config')" style="height:38px">重置</button>
+                <button class="btn btn-primary" onclick="parent.applyFilter('config')" style="height:38px">查询</button>
+            </div>
         </div>
     </div>
 

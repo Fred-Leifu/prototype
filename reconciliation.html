@@ -7,27 +7,19 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body style="overflow:auto;background:transparent">
-    <div class="page-header">
-        <h2>对账单</h2>
-        <p>管理已生成的对账单，支持从不同维度查看和操作</p>
-    </div>
-
-    <div class="dimension-tabs">
-        <button class="dimension-tab active" data-dimension="company" onclick="switchStatementDimension('company')">单位维度</button>
-        <button class="dimension-tab" data-dimension="group" onclick="switchStatementDimension('group')">课题组维度</button>
-        <button class="dimension-tab" data-dimension="customer" onclick="switchStatementDimension('customer')">客户维度</button>
-    </div>
-
     <div class="filter-section">
-        <div class="filter-row">
+        <div class="filter-row" style="flex-wrap:nowrap">
             <div class="filter-item">
-                <label id="dimension-filter-label-statement">单位名称</label>
-                <select id="statement-filter-1">
-                    <option value="">全部</option>
-                    <option value="1">北京科技有限公司</option>
-                    <option value="2">上海生物科技</option>
-                    <option value="3">广州医药集团</option>
-                </select>
+                <label>客户名称</label>
+                <div id="filter-customer-multi"></div>
+            </div>
+            <div class="filter-item">
+                <label>课题组名称</label>
+                <div id="filter-group-multi"></div>
+            </div>
+            <div class="filter-item">
+                <label>单位名称</label>
+                <div id="filter-company-multi"></div>
             </div>
             <div class="filter-item">
                 <label>日期范围</label>
@@ -37,313 +29,213 @@
                 <label>至</label>
                 <input type="date" id="statement-date-end">
             </div>
-        </div>
-        <div class="filter-actions" style="display:flex;gap:10px;justify-content:flex-end">
-            <button class="btn btn-outline" onclick="parent.resetFilter('statement')">重置</button>
-            <button class="btn btn-primary" onclick="parent.applyFilter('statement')">查询</button>
-        </div>
-    </div>
-
-    <!-- 单位维度表格 -->
-    <div class="dimension-table active" id="statement-table-company">
-        <div class="table-container">
-            <div class="table-header">
-                <div class="table-header-left">共 <span id="statement-company-count">4</span> 条记录</div>
-                <div class="table-header-right">
-                </div>
-            </div>
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th style="width:40px"><input type="checkbox" onchange="toggleAllStatementCheckbox(this)"></th>
-                        <th>单位名称</th>
-                        <th>单位ID</th>
-                        <th>账单含税金额</th>
-                        <th>更新时间</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><input type="checkbox" class="statement-checkbox"></td>
-                        <td>北京科技有限公司</td>
-                        <td>ORG-001</td>
-                        <td>¥125,800.00</td>
-                        <td>2024-01-15 14:30</td>
-                        <td><button class="action-btn view" onclick="openStatementSidePanel('北京科技有限公司')">查看</button></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="statement-checkbox"></td>
-                        <td>上海生物科技</td>
-                        <td>ORG-002</td>
-                        <td>¥86,200.00</td>
-                        <td>2024-01-14 10:15</td>
-                        <td><button class="action-btn view" onclick="openStatementSidePanel('上海生物科技')">查看</button></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="statement-checkbox"></td>
-                        <td>广州医药集团</td>
-                        <td>ORG-003</td>
-                        <td>¥156,300.00</td>
-                        <td>2024-01-13 16:45</td>
-                        <td><button class="action-btn view" onclick="openStatementSidePanel('广州医药集团')">查看</button></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="statement-checkbox"></td>
-                        <td>深圳医疗器械</td>
-                        <td>ORG-004</td>
-                        <td>¥45,200.00</td>
-                        <td>2024-01-12 09:00</td>
-                        <td><button class="action-btn view" onclick="openStatementSidePanel('深圳医疗器械')">查看</button></td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="pagination" style="justify-content:flex-end">
-                <div class="pagination-right">
-                    <span class="page-size-label">每页</span>
-                    <select class="page-size-select">
-                        <option>10</option>
-                        <option selected>20</option>
-                        <option>50</option>
-                    </select>
-                    <span class="page-size-label">条</span>
-                    <span class="pagination-divider">|</span>
-                    <span class="pagination-info">1-4 / 4</span>
-                    <span class="pagination-divider">|</span>
-                    <button class="page-btn" disabled>‹</button>
-                    <button class="page-btn active">1</button>
-                    <button class="page-btn">›</button>
-                    <span class="pagination-divider">|</span>
-                    <span class="page-size-label">跳至</span>
-                    <input type="text" class="page-jump-input" value="1">
-                    <span class="page-size-label">页</span>
-                    <button class="btn btn-primary page-jump-btn">确定</button>
-                </div>
+            <div class="filter-item" style="flex-direction:row;align-items:flex-end;gap:8px">
+                <button class="btn btn-outline" onclick="parent.resetFilter('statement')" style="height:38px">重置</button>
+                <button class="btn btn-primary" onclick="parent.applyFilter('statement')" style="height:38px">查询</button>
+                <button class="btn btn-primary" onclick="parent.alert('导出功能（模拟）')" style="height:38px">导出</button>
             </div>
         </div>
     </div>
 
-    <!-- 课题组维度表格 -->
-    <div class="dimension-table" id="statement-table-group">
-        <div class="table-container">
-            <div class="table-header">
-                <div class="table-header-left">共 <span id="statement-group-count">4</span> 条记录</div>
-                <div class="table-header-right">
-                </div>
-            </div>
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th style="width:40px"><input type="checkbox" onchange="toggleAllStatementCheckbox(this)"></th>
-                        <th>课题组</th>
-                        <th>课题组ID</th>
-                        <th>账单含税金额</th>
-                        <th>更新时间</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><input type="checkbox" class="statement-checkbox"></td>
-                        <td>基因编辑课题组</td>
-                        <td>GRP-001</td>
-                        <td>¥45,600.00</td>
-                        <td>2024-01-15 14:30</td>
-                        <td><button class="action-btn view" onclick="openStatementSidePanel('基因编辑课题组')">查看</button></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="statement-checkbox"></td>
-                        <td>蛋白质工程组</td>
-                        <td>GRP-002</td>
-                        <td>¥52,100.00</td>
-                        <td>2024-01-14 10:15</td>
-                        <td><button class="action-btn view" onclick="openStatementSidePanel('蛋白质工程组')">查看</button></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="statement-checkbox"></td>
-                        <td>药物研发一组</td>
-                        <td>GRP-003</td>
-                        <td>¥98,200.00</td>
-                        <td>2024-01-13 16:45</td>
-                        <td><button class="action-btn view" onclick="openStatementSidePanel('药物研发一组')">查看</button></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="statement-checkbox"></td>
-                        <td>细胞治疗组</td>
-                        <td>GRP-004</td>
-                        <td>¥28,400.00</td>
-                        <td>2024-01-12 09:00</td>
-                        <td><button class="action-btn view" onclick="openStatementSidePanel('细胞治疗组')">查看</button></td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="pagination" style="justify-content:flex-end">
-                <div class="pagination-right">
-                    <span class="page-size-label">每页</span>
-                    <select class="page-size-select">
-                        <option>10</option>
-                        <option selected>20</option>
-                        <option>50</option>
-                    </select>
-                    <span class="page-size-label">条</span>
-                    <span class="pagination-divider">|</span>
-                    <span class="pagination-info">1-4 / 4</span>
-                    <span class="pagination-divider">|</span>
-                    <button class="page-btn" disabled>‹</button>
-                    <button class="page-btn active">1</button>
-                    <button class="page-btn">›</button>
-                    <span class="pagination-divider">|</span>
-                    <span class="page-size-label">跳至</span>
-                    <input type="text" class="page-jump-input" value="1">
-                    <span class="page-size-label">页</span>
-                    <button class="btn btn-primary page-jump-btn">确定</button>
-                </div>
-            </div>
+    <div class="table-container">
+        <div class="table-header">
+            <div class="table-header-left">共 <span id="statement-count">4</span> 条记录</div>
+            <div class="table-header-right"></div>
         </div>
-    </div>
-
-    <!-- 客户维度表格 -->
-    <div class="dimension-table" id="statement-table-customer">
-        <div class="table-container">
-            <div class="table-header">
-                <div class="table-header-left">共 <span id="statement-customer-count">4</span> 条记录</div>
-                <div class="table-header-right">
-                </div>
-            </div>
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th style="width:40px"><input type="checkbox" onchange="toggleAllStatementCheckbox(this)"></th>
-                        <th>客户</th>
-                        <th>客户ID</th>
-                        <th>课题组</th>
-                        <th>课题组ID</th>
-                        <th>单位名称</th>
-                        <th>单位ID</th>
-                        <th>业务员</th>
-                        <th>账单含税金额</th>
-                        <th>更新时间</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><input type="checkbox" class="statement-checkbox"></td>
-                        <td>北京华大基因</td>
-                        <td>CUS-001</td>
-                        <td>基因编辑课题组</td>
-                        <td>GRP-001</td>
-                        <td>北京科技有限公司</td>
-                        <td>ORG-001</td>
-                        <td>张三</td>
-                        <td>¥89,500.00</td>
-                        <td>2024-01-15 14:30</td>
-                        <td><button class="action-btn view" onclick="openStatementSidePanel('北京华大基因')">查看</button></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="statement-checkbox"></td>
-                        <td>上海药明康德</td>
-                        <td>CUS-002</td>
-                        <td>蛋白质工程组</td>
-                        <td>GRP-002</td>
-                        <td>上海生物科技</td>
-                        <td>ORG-002</td>
-                        <td>李四</td>
-                        <td>¥156,200.00</td>
-                        <td>2024-01-14 10:15</td>
-                        <td><button class="action-btn view" onclick="openStatementSidePanel('上海药明康德')">查看</button></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="statement-checkbox"></td>
-                        <td>广州达安基因</td>
-                        <td>CUS-003</td>
-                        <td>药物研发一组</td>
-                        <td>GRP-003</td>
-                        <td>广州医药集团</td>
-                        <td>ORG-003</td>
-                        <td>王五</td>
-                        <td>¥213,600.00</td>
-                        <td>2024-01-13 16:45</td>
-                        <td><button class="action-btn view" onclick="openStatementSidePanel('广州达安基因')">查看</button></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="statement-checkbox"></td>
-                        <td>深圳华大智造</td>
-                        <td>CUS-004</td>
-                        <td>细胞治疗组</td>
-                        <td>GRP-004</td>
-                        <td>深圳医疗器械</td>
-                        <td>ORG-004</td>
-                        <td>赵六</td>
-                        <td>¥67,800.00</td>
-                        <td>2024-01-12 09:00</td>
-                        <td><button class="action-btn view" onclick="openStatementSidePanel('深圳华大智造')">查看</button></td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="pagination" style="justify-content:flex-end">
-                <div class="pagination-right">
-                    <span class="page-size-label">每页</span>
-                    <select class="page-size-select">
-                        <option>10</option>
-                        <option selected>20</option>
-                        <option>50</option>
-                    </select>
-                    <span class="page-size-label">条</span>
-                    <span class="pagination-divider">|</span>
-                    <span class="pagination-info">1-4 / 4</span>
-                    <span class="pagination-divider">|</span>
-                    <button class="page-btn" disabled>‹</button>
-                    <button class="page-btn active">1</button>
-                    <button class="page-btn">›</button>
-                    <span class="pagination-divider">|</span>
-                    <span class="page-size-label">跳至</span>
-                    <input type="text" class="page-jump-input" value="1">
-                    <span class="page-size-label">页</span>
-                    <button class="btn btn-primary page-jump-btn">确定</button>
-                </div>
+        <div style="overflow-x:auto;max-width:100%">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th style="width:40px"><input type="checkbox" onchange="toggleAllCheckbox(this)"></th>
+                    <th>账单ID</th>
+                    <th>账单维度</th>
+                    <th>账单类型</th>
+                    <th>报账人姓名</th>
+                    <th>报账人联系方式</th>
+                    <th>报账人邮箱</th>
+                    <th>单位名称</th>
+                    <th>课题组</th>
+                    <th>客户</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>BILL-001</td>
+                    <td>课题组</td>
+                    <td>服务</td>
+                    <td>张会计</td>
+                    <td>13800000001</td>
+                    <td>zhang@example.com</td>
+                    <td>北京科技有限公司</td>
+                    <td><span class="badge badge-info" style="margin:2px">基因编辑课题组</span><span class="badge badge-info" style="margin:2px">蛋白质工程组</span></td>
+                    <td>北京华大基因</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>BILL-002</td>
+                    <td>客户</td>
+                    <td>产品</td>
+                    <td>李会计</td>
+                    <td>13900000002</td>
+                    <td>li@example.com</td>
+                    <td>上海生物科技</td>
+                    <td>蛋白质工程组</td>
+                    <td><span class="badge badge-info" style="margin:2px">上海药明康德</span><span class="badge badge-info" style="margin:2px">广州达安基因</span></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>BILL-003</td>
+                    <td>课题组</td>
+                    <td>服务</td>
+                    <td>王会计</td>
+                    <td>13700000003</td>
+                    <td>wang@example.com</td>
+                    <td>广州医药集团</td>
+                    <td><span class="badge badge-info" style="margin:2px">药物研发一组</span><span class="badge badge-info" style="margin:2px">细胞治疗组</span></td>
+                    <td><span class="badge badge-info" style="margin:2px">广州达安基因</span><span class="badge badge-info" style="margin:2px">深圳华大智造</span></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>BILL-004</td>
+                    <td>客户</td>
+                    <td>产品</td>
+                    <td>赵会计</td>
+                    <td>13600000004</td>
+                    <td>zhao@example.com</td>
+                    <td>深圳医疗器械</td>
+                    <td>基因编辑课题组</td>
+                    <td>北京华大基因</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+        <div class="pagination" style="justify-content:flex-end">
+            <div class="pagination-right">
+                <span class="page-size-label">每页</span>
+                <select class="page-size-select">
+                    <option>10</option>
+                    <option selected>20</option>
+                    <option>50</option>
+                </select>
+                <span class="page-size-label">条</span>
+                <span class="pagination-divider">|</span>
+                <span class="pagination-info">1-4 / 4</span>
+                <span class="pagination-divider">|</span>
+                <button class="page-btn" disabled>‹</button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">›</button>
+                <span class="pagination-divider">|</span>
+                <span class="page-size-label">跳至</span>
+                <input type="text" class="page-jump-input" value="1">
+                <span class="page-size-label">页</span>
+                <button class="btn btn-primary page-jump-btn">确定</button>
             </div>
         </div>
     </div>
 
     <script>
-        /* ===== 桥接函数：通过 postMessage 通知父页面 ===== */
-        function openStatementSidePanel(title) {
-            parent.postMessage({ action: 'openSidePanel', title: title }, '*');
+        var demoCustomers = [
+            '北京华大基因科技有限公司',
+            '上海生工生物工程有限公司',
+            '广州达安基因股份有限公司',
+            '深圳华大智造科技有限公司',
+            '杭州博日科技股份有限公司',
+            '南京诺唯赞生物科技股份有限公司'
+        ];
+        var demoGroups = [
+            '张教授课题组（分子生物学）',
+            '李教授课题组（遗传学）',
+            '王教授课题组（细胞生物学）',
+            '赵教授课题组（药物研发）',
+            '陈教授课题组（免疫学）',
+            '刘教授课题组（化学生物学）'
+        ];
+        var demoCompanies = [
+            '北京科技有限公司',
+            '上海生物科技',
+            '广州医药集团',
+            '深圳医疗器械'
+        ];
+
+        /* ===== 多选下拉 ===== */
+        function createMultiSelectHTML(id, items, placeholder) {
+            var html = '<div class="multi-select" id="' + id + '">';
+            html += '<div class="multi-select-trigger" onclick="toggleMultiSelect(this)">';
+            html += '<span class="multi-select-placeholder" data-placeholder="' + escHtml(placeholder || '请选择') + '">' + escHtml(placeholder || '请选择') + '</span>';
+            html += '<span class="multi-select-arrow">▾</span>';
+            html += '</div>';
+            html += '<div class="multi-select-dropdown">';
+            html += '<input type="text" class="multi-select-search" placeholder="搜索..." oninput="filterMultiSelect(this)">';
+            html += '<div class="multi-select-options">';
+            for (var i = 0; i < items.length; i++) {
+                html += '<label class="multi-select-option"><input type="checkbox" value="' + escHtml(items[i]) + '" onchange="updateMultiSelectLabel(this)"> ' + escHtml(items[i]) + '</label>';
+            }
+            html += '</div></div></div>';
+            return html;
         }
 
-        /* ===== 对账单维度切换（页面专用） ===== */
-        function switchStatementDimension(dim) {
-            var tabs = document.querySelectorAll('.dimension-tab');
-            tabs.forEach(function(t) { t.classList.remove('active'); });
-            tabs.forEach(function(t) {
-                if (t.dataset.dimension === dim) t.classList.add('active');
+        function toggleMultiSelect(trigger) {
+            var wrapper = trigger.parentNode;
+            var isOpen = wrapper.classList.contains('open');
+            document.querySelectorAll('.multi-select.open').forEach(function(el) {
+                el.classList.remove('open');
             });
-
-            var tables = document.querySelectorAll('.dimension-table');
-            tables.forEach(function(t) { t.classList.remove('active'); });
-            document.getElementById('statement-table-' + dim).classList.add('active');
-
-            var labels = {
-                'company': '单位名称',
-                'group': '课题组名称',
-                'customer': '客户名称'
-            };
-            document.getElementById('dimension-filter-label-statement').textContent = labels[dim];
+            if (!isOpen) wrapper.classList.add('open');
         }
 
-        /* ===== 全选勾选框（页面专用） ===== */
-        function toggleAllStatementCheckbox(master) {
-            var checkboxes = document.querySelectorAll('.statement-checkbox');
-            checkboxes.forEach(function(cb) { cb.checked = master.checked; });
+        function updateMultiSelectLabel(cb) {
+            var wrapper = cb.closest('.multi-select');
+            var checked = wrapper.querySelectorAll('.multi-select-option input:checked');
+            var placeholder = wrapper.querySelector('.multi-select-placeholder');
+            var trigger = wrapper.querySelector('.multi-select-trigger');
+            if (checked.length === 0) {
+                placeholder.textContent = placeholder.getAttribute('data-placeholder') || '请选择';
+            } else {
+                var labels = [];
+                checked.forEach(function(c) { labels.push(c.value); });
+                placeholder.textContent = labels.join(', ');
+            }
+            trigger.classList.toggle('has-value', checked.length > 0);
         }
 
-        /* ===== postMessage 自适应高度 ===== */
+        function filterMultiSelect(input) {
+            var keyword = input.value.toLowerCase().trim();
+            var options = input.parentNode.querySelectorAll('.multi-select-option');
+            options.forEach(function(opt) {
+                opt.style.display = opt.textContent.toLowerCase().includes(keyword) ? '' : 'none';
+            });
+        }
+
+        function escHtml(str) {
+            var d = document.createElement('div');
+            d.textContent = str || '';
+            return d.innerHTML;
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.multi-select')) {
+                document.querySelectorAll('.multi-select.open').forEach(function(el) {
+                    el.classList.remove('open');
+                });
+            }
+        });
+
+        function toggleAllCheckbox(master) {
+            document.querySelectorAll('.row-checkbox').forEach(function(cb) { cb.checked = master.checked; });
+        }
+
         function sendHeight() {
             var h = document.documentElement.scrollHeight;
             parent.postMessage({ iframeHeight: h }, '*');
         }
-        window.addEventListener('load', sendHeight);
+
+        window.addEventListener('load', function() {
+            document.getElementById('filter-customer-multi').innerHTML = createMultiSelectHTML('ms-filter-customer', demoCustomers, '请选择客户');
+            document.getElementById('filter-group-multi').innerHTML = createMultiSelectHTML('ms-filter-group', demoGroups, '请选择课题组');
+            document.getElementById('filter-company-multi').innerHTML = createMultiSelectHTML('ms-filter-company', demoCompanies, '请选择单位');
+            sendHeight();
+        });
         window.addEventListener('resize', sendHeight);
     </script>
 </body>

@@ -555,6 +555,11 @@
                         </div>
                     </div>
                 </div>
+                <div class="dimension-tabs" style="margin-bottom:12px;width:100%">
+                    <button class="dimension-tab active" onclick="switchOrderTab(this,'全部')">全部</button>
+                    <button class="dimension-tab" onclick="switchOrderTab(this,'服务')">服务</button>
+                    <button class="dimension-tab" onclick="switchOrderTab(this,'产品')">产品</button>
+                </div>
                 <div class="table-container">
                     <div class="table-header">
                         <div class="table-header-left">共 <span id="order-count">6</span> 条记录</div>
@@ -587,7 +592,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <tr data-order-type="服务">
                                     <td>ORD-2024-0156</td>
                                     <td><span class="badge badge-in-progress">进行中</span></td>
                                     <td><span class="badge badge-warning">待对账</span></td>
@@ -600,7 +605,7 @@
                                     <td>2024-01</td>
                                     <td>北京市海淀区中关村</td>
                                     <td>北京科技有限公司</td>
-                                    <td>标准订单</td>
+                                    <td>服务</td>
                                     <td>100</td>
                                     <td>¥150.00</td>
                                     <td>¥145.00</td>
@@ -610,7 +615,7 @@
                                     <td>个</td>
                                     <td>-</td>
                                 </tr>
-                                <tr>
+                                <tr data-order-type="产品">
                                     <td>ORD-2024-0157</td>
                                     <td><span class="badge badge-pending-receipt">待签收</span></td>
                                     <td><span class="badge badge-warning">待对账</span></td>
@@ -623,7 +628,7 @@
                                     <td>2024-01</td>
                                     <td>上海市浦东新区张江</td>
                                     <td>上海生物科技</td>
-                                    <td>加急订单</td>
+                                    <td>产品</td>
                                     <td>50</td>
                                     <td>¥280.00</td>
                                     <td>¥260.00</td>
@@ -633,7 +638,7 @@
                                     <td>件</td>
                                     <td>需加急处理</td>
                                 </tr>
-                                <tr>
+                                <tr data-order-type="产品">
                                     <td>ORD-2024-0158</td>
                                     <td><span class="badge badge-pending-rate">待计算汇率</span></td>
                                     <td><span class="badge badge-warning">待对账</span></td>
@@ -646,7 +651,7 @@
                                     <td>2024-01</td>
                                     <td>广州市黄埔区科学城</td>
                                     <td>广州医药集团</td>
-                                    <td>外币订单</td>
+                                    <td>产品</td>
                                     <td>200</td>
                                     <td>¥75.00</td>
                                     <td>¥72.00</td>
@@ -656,7 +661,7 @@
                                     <td>套</td>
                                     <td>汇率待确认</td>
                                 </tr>
-                                <tr>
+                                <tr data-order-type="服务">
                                     <td>ORD-2024-0159</td>
                                     <td><span class="badge badge-pending-confirm">待确认结单</span></td>
                                     <td><span class="badge badge-info">未入账</span></td>
@@ -669,7 +674,7 @@
                                     <td>2024-02</td>
                                     <td>深圳市南山区科技园</td>
                                     <td>深圳医疗器械</td>
-                                    <td>标准订单</td>
+                                    <td>服务</td>
                                     <td>30</td>
                                     <td>¥520.00</td>
                                     <td>¥500.00</td>
@@ -679,7 +684,7 @@
                                     <td>台</td>
                                     <td>客户确认中</td>
                                 </tr>
-                                <tr>
+                                <tr data-order-type="服务">
                                     <td>ORD-2024-0160</td>
                                     <td><span class="badge badge-completed">结单</span></td>
                                     <td><span class="badge badge-success">已对账</span></td>
@@ -692,7 +697,7 @@
                                     <td>2024-01</td>
                                     <td>北京市昌平区生命园</td>
                                     <td>北京科技有限公司</td>
-                                    <td>标准订单</td>
+                                    <td>服务</td>
                                     <td>80</td>
                                     <td>¥200.00</td>
                                     <td>¥195.00</td>
@@ -702,7 +707,7 @@
                                     <td>个</td>
                                     <td>-</td>
                                 </tr>
-                                <tr>
+                                <tr data-order-type="产品">
                                     <td>ORD-2024-0161</td>
                                     <td><span class="badge badge-cancelled">取消</span></td>
                                     <td><span class="badge badge-info">未入账</span></td>
@@ -715,7 +720,7 @@
                                     <td>-</td>
                                     <td>上海市徐汇区漕河泾</td>
                                     <td>上海生物科技</td>
-                                    <td>标准订单</td>
+                                    <td>产品</td>
                                     <td>-</td>
                                     <td>-</td>
                                     <td>-</td>
@@ -1138,6 +1143,20 @@
 
         function exportOrders() {
             alert('导出功能（模拟）');
+        }
+
+        /* ===== 订单分类标签切换 ===== */
+        function switchOrderTab(btn, type) {
+            document.querySelectorAll('.side-panel-body .dimension-tab').forEach(function(t) { t.classList.remove('active'); });
+            btn.classList.add('active');
+            var rows = document.querySelectorAll('#order-detail-table tbody tr');
+            rows.forEach(function(row) {
+                if (type === '全部') {
+                    row.style.display = '';
+                } else {
+                    row.style.display = row.getAttribute('data-order-type') === type ? '' : 'none';
+                }
+            });
         }
 
         /* ===== 对账单维度切换 ===== */

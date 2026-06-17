@@ -526,6 +526,15 @@
                             </select>
                         </div>
                         <div class="filter-item">
+                            <label>对账状态</label>
+                            <select id="order-filter-recon-status">
+                                <option value="">全部</option>
+                                <option value="unbilled">未入账</option>
+                                <option value="pending">待对账</option>
+                                <option value="done">已对账</option>
+                            </select>
+                        </div>
+                        <div class="filter-item">
                             <label>开始日期</label>
                             <input type="date" id="order-filter-date-start">
                         </div>
@@ -542,6 +551,7 @@
                         <div class="filter-item" style="justify-content:flex-end">
                             <label>&nbsp;</label>
                             <button class="btn btn-primary" onclick="filterOrders()" style="height:38px">查询</button>
+                            <button class="btn btn-outline" onclick="exportOrders()" style="height:38px">导出</button>
                         </div>
                     </div>
                 </div>
@@ -555,6 +565,7 @@
                                 <tr>
                                     <th>订单号</th>
                                     <th>订单状态</th>
+                                    <th>对账状态</th>
                                     <th>结算基地</th>
                                     <th>客户</th>
                                     <th>开票流程</th>
@@ -579,6 +590,7 @@
                                 <tr>
                                     <td>ORD-2024-0156</td>
                                     <td><span class="badge badge-in-progress">进行中</span></td>
+                                    <td><span class="badge badge-warning">待对账</span></td>
                                     <td>北京基地</td>
                                     <td>北京华大基因</td>
                                     <td>标准开票</td>
@@ -601,6 +613,7 @@
                                 <tr>
                                     <td>ORD-2024-0157</td>
                                     <td><span class="badge badge-pending-receipt">待签收</span></td>
+                                    <td><span class="badge badge-warning">待对账</span></td>
                                     <td>上海基地</td>
                                     <td>上海药明康德</td>
                                     <td>急单开票</td>
@@ -623,6 +636,7 @@
                                 <tr>
                                     <td>ORD-2024-0158</td>
                                     <td><span class="badge badge-pending-rate">待计算汇率</span></td>
+                                    <td><span class="badge badge-warning">待对账</span></td>
                                     <td>广州基地</td>
                                     <td>广州达安基因</td>
                                     <td>外币开票</td>
@@ -645,6 +659,7 @@
                                 <tr>
                                     <td>ORD-2024-0159</td>
                                     <td><span class="badge badge-pending-confirm">待确认结单</span></td>
+                                    <td><span class="badge badge-info">未入账</span></td>
                                     <td>深圳基地</td>
                                     <td>深圳华大智造</td>
                                     <td>标准开票</td>
@@ -667,6 +682,7 @@
                                 <tr>
                                     <td>ORD-2024-0160</td>
                                     <td><span class="badge badge-completed">结单</span></td>
+                                    <td><span class="badge badge-success">已对账</span></td>
                                     <td>北京基地</td>
                                     <td>北京华大基因</td>
                                     <td>标准开票</td>
@@ -689,6 +705,7 @@
                                 <tr>
                                     <td>ORD-2024-0161</td>
                                     <td><span class="badge badge-cancelled">取消</span></td>
+                                    <td><span class="badge badge-info">未入账</span></td>
                                     <td>上海基地</td>
                                     <td>上海药明康德</td>
                                     <td>-</td>
@@ -1070,6 +1087,7 @@
         function filterOrders() {
             var status = document.getElementById('order-filter-status').value;
             var customer = document.getElementById('order-filter-customer').value;
+            var reconStatus = document.getElementById('order-filter-recon-status').value;
             var dateStart = document.getElementById('order-filter-date-start').value;
             var dateEnd = document.getElementById('order-filter-date-end').value;
             var keyword = document.getElementById('order-filter-search').value.toLowerCase();
@@ -1092,15 +1110,20 @@
                 }
                 if (show && customer) {
                     var cells = row.querySelectorAll('td');
-                    if (cells[3] && cells[3].textContent !== customer) show = false;
+                    if (cells[4] && cells[4].textContent !== customer) show = false;
+                }
+                if (show && reconStatus) {
+                    var cells = row.querySelectorAll('td');
+                    var reconMap = { 'unbilled': '未入账', 'pending': '待对账', 'done': '已对账' };
+                    if (cells[2] && cells[2].textContent !== reconMap[reconStatus]) show = false;
                 }
                 if (show && dateStart) {
                     var cells = row.querySelectorAll('td');
-                    if (cells[7] && cells[7].textContent < dateStart) show = false;
+                    if (cells[8] && cells[8].textContent < dateStart) show = false;
                 }
                 if (show && dateEnd) {
                     var cells = row.querySelectorAll('td');
-                    if (cells[7] && cells[7].textContent > dateEnd) show = false;
+                    if (cells[8] && cells[8].textContent > dateEnd) show = false;
                 }
                 if (show && keyword) {
                     var cells = row.querySelectorAll('td');
@@ -1111,6 +1134,10 @@
             });
 
             document.getElementById('order-count').textContent = visibleCount;
+        }
+
+        function exportOrders() {
+            alert('导出功能（模拟）');
         }
 
         /* ===== 对账单维度切换 ===== */

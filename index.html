@@ -68,7 +68,7 @@
                             <div class="axure-module-body">
                                 <div class="axure-page" data-axure-page="unbilled" onclick="showAxurePage('unbilled')">
                                     <span class="axure-page-icon">◇</span>
-                                    <span>未出账账单</span>
+                                    <span>账单</span>
                                 </div>
                                 <div class="axure-page" data-axure-page="statement" onclick="showAxurePage('statement')">
                                     <span class="axure-page-icon">◇</span>
@@ -108,7 +108,7 @@
                         <span class="nav-arrow">›</span>
                     </div>
                     <div class="nav-submenu">
-                        <div class="nav-subitem active" data-submenu="unbilled">未出账账单</div>
+                        <div class="nav-subitem active" data-submenu="unbilled">账单</div>
                         <div class="nav-subitem" data-submenu="statement">对账单</div>
                         <div class="nav-subitem" data-submenu="config">对账要求配置</div>
                     </div>
@@ -751,7 +751,7 @@
                     if (menu === 'billing') {
                         this.parentElement.classList.add('expanded');
                         showPage('unbilled');
-                        updateBreadcrumb('未出账账单');
+                        updateBreadcrumb('账单');
                     } else {
                         document.querySelectorAll('.nav-item').forEach(function(el) {
                             el.classList.remove('expanded');
@@ -777,7 +777,7 @@
                     showPage(submenu);
                     
                     var titles = {
-                        'unbilled': '未出账账单',
+                        'unbilled': '账单',
                         'statement': '对账单',
                         'config': '对账要求配置'
                     };
@@ -943,9 +943,9 @@
             var body = document.getElementById('modal-body');
             
             var titles = {
-                'add-unbilled': '新增未出账账单',
-                'edit-unbilled': '编辑未出账账单',
-                'view-unbilled': '查看未出账账单',
+                'add-unbilled': '新增账单',
+                'edit-unbilled': '编辑账单',
+                'view-unbilled': '查看账单',
                 'add-statement': '生成对账单',
                 'edit-statement': '对账操作',
                 'view-statement': '查看对账单',

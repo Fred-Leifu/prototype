@@ -63,20 +63,28 @@
                         <div class="axure-module">
                             <div class="axure-module-header" onclick="toggleAxureModule(this)">
                                 <span class="axure-arrow">▾</span>
-                                <span>销综系统</span>
+                                <span>原型页面</span>
                             </div>
                             <div class="axure-module-body">
-                                <div class="axure-page" data-axure-page="unbilled" onclick="showAxurePage('unbilled')">
-                                    <span class="axure-page-icon">◇</span>
-                                    <span>账单</span>
-                                </div>
-                                <div class="axure-page" data-axure-page="statement" onclick="showAxurePage('statement')">
-                                    <span class="axure-page-icon">◇</span>
-                                    <span>对账单</span>
-                                </div>
-                                <div class="axure-page" data-axure-page="config" onclick="showAxurePage('config')">
-                                    <span class="axure-page-icon">◇</span>
-                                    <span>账单配置</span>
+                                <div class="axure-module">
+                                    <div class="axure-module-header" onclick="toggleAxureModule(this)">
+                                        <span class="axure-arrow">▾</span>
+                                        <span>账单管理</span>
+                                    </div>
+                                    <div class="axure-module-body">
+                                        <div class="axure-page" data-axure-page="unbilled" onclick="showAxurePage('unbilled')">
+                                            <span class="axure-page-icon">◇</span>
+                                            <span>未出账账单</span>
+                                        </div>
+                                        <div class="axure-page" data-axure-page="billed" onclick="showAxurePage('billed')">
+                                            <span class="axure-page-icon">◇</span>
+                                            <span>已出账账单</span>
+                                        </div>
+                                        <div class="axure-page" data-axure-page="bill-config" onclick="showAxurePage('bill-config')">
+                                            <span class="axure-page-icon">◇</span>
+                                            <span>账单配置</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -100,30 +108,12 @@
             <div class="sidebar-header">
                 <h1>销售综合管理系统</h1>
             </div>
-            <nav class="nav-menu">
-                <div class="nav-item expanded">
-                    <div class="nav-item-header active" data-menu="billing">
-                        <span class="nav-icon">�</span>
-                        <span>账单管理</span>
-                        <span class="nav-arrow">›</span>
-                    </div>
-                    <div class="nav-submenu">
-                        <div class="nav-subitem active" data-submenu="unbilled">账单</div>
-                        <div class="nav-subitem" data-submenu="statement">对账单</div>
-                        <div class="nav-subitem" data-submenu="config">账单配置</div>
-                    </div>
-                </div>
-            </nav>
         </aside>
 
         <main class="main-content">
             <header class="top-bar">
                 <div class="breadcrumbs">
-                    <a href="#">首页</a>
-                    <span>›</span>
-                    <a href="#">账单管理</a>
-                    <span>›</span>
-                    <span id="breadcrumb-current">未出账账单</span>
+                    <span id="breadcrumb-current">项目简介-简介</span>
                 </div>
                 <div class="user-info">
                     <div class="theme-toggle" id="themeToggle"></div>
@@ -133,8 +123,6 @@
             </header>
 
             <div class="page-container">
-                <iframe id="page-iframe" src="" frameborder="0" style="display:none;width:100%;border:none;"></iframe>
-
                 <!-- ===== 需求概览 - 项目简介-简介 ===== -->
                 <div id="page-overview-intro" class="page-content">
                     <div class="page-header">
@@ -431,6 +419,683 @@
                     </div>
                 </div>
 
+                <!-- ===== 原型页面 - 未出账账单 ===== -->
+                <div id="page-unbilled" class="page-content" style="display: none;">
+                    <div class="page-header">
+                        <h2>未出账账单</h2>
+                    </div>
+                    <div class="filter-section">
+                        <div class="filter-row">
+                            <div class="filter-item">
+                                <label>客户名称</label>
+                                <input type="text" placeholder="请输入客户名称" style="width:160px">
+                            </div>
+                            <div class="filter-item">
+                                <label>课题组</label>
+                                <input type="text" placeholder="请输入课题组" style="width:160px">
+                            </div>
+                            <div class="filter-item">
+                                <label>单位名称</label>
+                                <input type="text" placeholder="请输入单位名称" style="width:160px">
+                            </div>
+                            <div class="filter-item">
+                                <label>订单周期</label>
+                                <input type="date" style="width:140px">
+                            </div>
+                            <div class="filter-item">
+                                <label>&nbsp;</label>
+                                <input type="date" style="width:140px">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="toolbar-section">
+                        <div class="toolbar-left">
+                            <button class="btn btn-primary" onclick="alert('查询')">查询</button>
+                            <button class="btn btn-outline" onclick="alert('重置')">重置</button>
+                            <button class="btn btn-outline" onclick="alert('列表导出')">列表导出</button>
+                            <button class="btn btn-outline" onclick="alert('明细导出')">明细导出</button>
+                        </div>
+                        <div class="toolbar-right">共 <span id="unbilled-count">12</span> 条记录</div>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-scroll">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>客户ID</th>
+                                        <th>客户名称</th>
+                                        <th>课题组ID</th>
+                                        <th>课题组名称</th>
+                                        <th>单位ID</th>
+                                        <th>单位名称</th>
+                                        <th>未出账金额</th>
+                                        <th>订单周期</th>
+                                        <th>更新时间</th>
+                                        <th class="sticky-col">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>CUST-001</td>
+                                        <td>北京华大基因</td>
+                                        <td>GP-001</td>
+                                        <td>张教授课题组</td>
+                                        <td>ORG-001</td>
+                                        <td>北京科技有限公司</td>
+                                        <td>¥45,000.00</td>
+                                        <td>2026-01 ~ 2026-03</td>
+                                        <td>2026-03-15</td>
+                                        <td class="sticky-col"><button class="action-btn view" onclick="alert('详情')">详情</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CUST-002</td>
+                                        <td>上海药明康德</td>
+                                        <td>GP-002</td>
+                                        <td>李教授课题组</td>
+                                        <td>ORG-002</td>
+                                        <td>上海生物科技</td>
+                                        <td>¥32,500.00</td>
+                                        <td>2026-02 ~ 2026-04</td>
+                                        <td>2026-04-10</td>
+                                        <td class="sticky-col"><button class="action-btn view" onclick="alert('详情')">详情</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CUST-003</td>
+                                        <td>广州达安基因</td>
+                                        <td>GP-003</td>
+                                        <td>王教授课题组</td>
+                                        <td>ORG-003</td>
+                                        <td>广州医药集团</td>
+                                        <td>¥28,000.00</td>
+                                        <td>2026-01 ~ 2026-02</td>
+                                        <td>2026-02-28</td>
+                                        <td class="sticky-col"><button class="action-btn view" onclick="alert('详情')">详情</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CUST-004</td>
+                                        <td>深圳华大智造</td>
+                                        <td>GP-004</td>
+                                        <td>赵教授课题组</td>
+                                        <td>ORG-004</td>
+                                        <td>深圳医疗器械</td>
+                                        <td>¥56,000.00</td>
+                                        <td>2026-03 ~ 2026-05</td>
+                                        <td>2026-05-20</td>
+                                        <td class="sticky-col"><button class="action-btn view" onclick="alert('详情')">详情</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="pagination">
+                            <span class="pagination-info">显示 1-4 条，共 12 条</span>
+                            <div class="pagination-right">
+                                <span class="page-size-label">每页</span>
+                                <select class="page-size-select">
+                                    <option>10</option>
+                                    <option selected>20</option>
+                                    <option>50</option>
+                                    <option>100</option>
+                                </select>
+                                <span class="page-size-label">条</span>
+                                <span class="pagination-divider">|</span>
+                                <button class="page-btn" disabled>‹</button>
+                                <button class="page-btn active">1</button>
+                                <button class="page-btn">2</button>
+                                <button class="page-btn">3</button>
+                                <button class="page-btn">›</button>
+                                <span class="pagination-divider">|</span>
+                                <span class="page-size-label">跳至</span>
+                                <input type="text" class="page-jump-input" value="1">
+                                <button class="page-jump-btn btn btn-primary btn-sm">GO</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== 原型页面 - 已出账账单 ===== -->
+                <div id="page-billed" class="page-content" style="display: none;">
+                    <div class="page-header">
+                        <h2>已出账账单</h2>
+                    </div>
+                    <div class="filter-section">
+                        <div class="filter-row">
+                            <div class="filter-item">
+                                <label>账单类型</label>
+                                <select multiple style="height:38px;width:120px">
+                                    <option>全部</option>
+                                    <option>服务</option>
+                                    <option>产品</option>
+                                </select>
+                            </div>
+                            <div class="filter-item">
+                                <label>账单状态</label>
+                                <select multiple style="height:38px;width:140px">
+                                    <option>全部</option>
+                                    <option>待提交</option>
+                                    <option>待发送</option>
+                                    <option>待对账</option>
+                                    <option>已对账</option>
+                                    <option>不认可</option>
+                                </select>
+                            </div>
+                            <div class="filter-item">
+                                <label>报账人</label>
+                                <input type="text" placeholder="请输入报账人" style="width:140px">
+                            </div>
+                            <div class="filter-item">
+                                <label>客户名称</label>
+                                <div class="multi-select" id="billed-customer">
+                                    <div class="multi-select-trigger" onclick="toggleMultiSelect(this)">
+                                        <span class="multi-select-placeholder" data-placeholder="请选择">请选择</span>
+                                        <span class="multi-select-arrow">▾</span>
+                                    </div>
+                                    <div class="multi-select-dropdown">
+                                        <input type="text" class="multi-select-search" placeholder="搜索..." oninput="filterMultiSelect(this)">
+                                        <div class="multi-select-options">
+                                            <label class="multi-select-option"><input type="checkbox" value="北京华大基因" onchange="updateMultiSelectLabel(this)"> 北京华大基因</label>
+                                            <label class="multi-select-option"><input type="checkbox" value="上海药明康德" onchange="updateMultiSelectLabel(this)"> 上海药明康德</label>
+                                            <label class="multi-select-option"><input type="checkbox" value="广州达安基因" onchange="updateMultiSelectLabel(this)"> 广州达安基因</label>
+                                            <label class="multi-select-option"><input type="checkbox" value="深圳华大智造" onchange="updateMultiSelectLabel(this)"> 深圳华大智造</label>
+                                            <label class="multi-select-option"><input type="checkbox" value="杭州博日科技" onchange="updateMultiSelectLabel(this)"> 杭州博日科技</label>
+                                            <label class="multi-select-option"><input type="checkbox" value="南京诺唯赞" onchange="updateMultiSelectLabel(this)"> 南京诺唯赞</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="filter-item">
+                                <label>课题组名称</label>
+                                <div class="multi-select" id="billed-group">
+                                    <div class="multi-select-trigger" onclick="toggleMultiSelect(this)">
+                                        <span class="multi-select-placeholder" data-placeholder="请选择">请选择</span>
+                                        <span class="multi-select-arrow">▾</span>
+                                    </div>
+                                    <div class="multi-select-dropdown">
+                                        <input type="text" class="multi-select-search" placeholder="搜索..." oninput="filterMultiSelect(this)">
+                                        <div class="multi-select-options">
+                                            <label class="multi-select-option"><input type="checkbox" value="张教授课题组(分子生物学)" onchange="updateMultiSelectLabel(this)"> 张教授课题组(分子生物学)</label>
+                                            <label class="multi-select-option"><input type="checkbox" value="李教授课题组(遗传学)" onchange="updateMultiSelectLabel(this)"> 李教授课题组(遗传学)</label>
+                                            <label class="multi-select-option"><input type="checkbox" value="王教授课题组(细胞生物学)" onchange="updateMultiSelectLabel(this)"> 王教授课题组(细胞生物学)</label>
+                                            <label class="multi-select-option"><input type="checkbox" value="赵教授课题组(药物研发)" onchange="updateMultiSelectLabel(this)"> 赵教授课题组(药物研发)</label>
+                                            <label class="multi-select-option"><input type="checkbox" value="陈教授课题组(免疫学)" onchange="updateMultiSelectLabel(this)"> 陈教授课题组(免疫学)</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="filter-item">
+                                <label>生成时间</label>
+                                <input type="date" style="width:140px">
+                            </div>
+                            <div class="filter-item">
+                                <label>&nbsp;</label>
+                                <input type="date" style="width:140px">
+                            </div>
+                            <div class="filter-item filter-actions">
+                                <label>&nbsp;</label>
+                                <button class="btn btn-primary" onclick="alert('查询')">查询</button>
+                                <button class="btn btn-outline" onclick="alert('重置')">重置</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="toolbar-section">
+                        <div class="toolbar-left">
+                            <button class="btn btn-primary" onclick="alert('批量明细导出')">批量明细导出</button>
+                            <button class="btn btn-outline" onclick="alert('批量导出列表')">批量导出列表</button>
+                        </div>
+                        <div class="toolbar-right">共 <span id="billed-count">8</span> 条记录</div>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-scroll">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>账单类型</th>
+                                        <th>账单状态</th>
+                                        <th>已出账金额</th>
+                                        <th>报账人</th>
+                                        <th>报账人联系方式</th>
+                                        <th>报账人邮箱</th>
+                                        <th>销售名称</th>
+                                        <th>客户范围</th>
+                                        <th>课题组范围</th>
+                                        <th>单位ID</th>
+                                        <th>单位名称</th>
+                                        <th>订单周期</th>
+                                        <th>生成时间</th>
+                                        <th>更新时间</th>
+                                        <th class="sticky-col">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>服务</td>
+                                        <td><span style="color:var(--success-color)">已对账</span></td>
+                                        <td>¥45,000.00</td>
+                                        <td>张会计</td>
+                                        <td>13800000001</td>
+                                        <td>zhang@example.com</td>
+                                        <td>王五</td>
+                                        <td>北京华大基因</td>
+                                        <td>张教授课题组</td>
+                                        <td>ORG-001</td>
+                                        <td>北京科技有限公司</td>
+                                        <td>2026-01 ~ 2026-03</td>
+                                        <td>2026-03-01</td>
+                                        <td>2026-03-15</td>
+                                        <td class="sticky-col"><button class="action-btn view" onclick="alert('详情')">详情</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>产品</td>
+                                        <td><span style="color:var(--warning-color)">待对账</span></td>
+                                        <td>¥32,500.00</td>
+                                        <td>李会计</td>
+                                        <td>13800000002</td>
+                                        <td>li@example.com</td>
+                                        <td>陈七</td>
+                                        <td>上海药明康德</td>
+                                        <td>李教授课题组</td>
+                                        <td>ORG-002</td>
+                                        <td>上海生物科技</td>
+                                        <td>2026-02 ~ 2026-04</td>
+                                        <td>2026-04-01</td>
+                                        <td>2026-04-10</td>
+                                        <td class="sticky-col"><button class="action-btn view" onclick="alert('详情')">详情</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>服务</td>
+                                        <td><span style="color:var(--danger-color)">不认可</span></td>
+                                        <td>¥28,000.00</td>
+                                        <td>王会计</td>
+                                        <td>13800000003</td>
+                                        <td>wang@example.com</td>
+                                        <td>吴九</td>
+                                        <td>广州达安基因</td>
+                                        <td>王教授课题组</td>
+                                        <td>ORG-003</td>
+                                        <td>广州医药集团</td>
+                                        <td>2026-01 ~ 2026-02</td>
+                                        <td>2026-02-01</td>
+                                        <td>2026-02-28</td>
+                                        <td class="sticky-col"><button class="action-btn view" onclick="alert('详情')">详情</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="pagination">
+                            <span class="pagination-info">显示 1-3 条，共 8 条</span>
+                            <div class="pagination-right">
+                                <span class="page-size-label">每页</span>
+                                <select class="page-size-select">
+                                    <option>10</option>
+                                    <option selected>20</option>
+                                    <option>50</option>
+                                    <option>100</option>
+                                </select>
+                                <span class="page-size-label">条</span>
+                                <span class="pagination-divider">|</span>
+                                <button class="page-btn" disabled>‹</button>
+                                <button class="page-btn active">1</button>
+                                <button class="page-btn">2</button>
+                                <button class="page-btn">›</button>
+                                <span class="pagination-divider">|</span>
+                                <span class="page-size-label">跳至</span>
+                                <input type="text" class="page-jump-input" value="1">
+                                <button class="page-jump-btn btn btn-primary btn-sm">GO</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== 原型页面 - 账单配置 ===== -->
+                <div id="page-bill-config" class="page-content" style="display: none;">
+                    <div class="page-header">
+                        <h2>账单配置</h2>
+                    </div>
+                    <div class="config-tab-bar">
+                        <button class="config-tab-btn active" data-tab="customer" onclick="switchConfigTab('customer')">客户对账配置</button>
+                        <button class="config-tab-btn" data-tab="merge" onclick="switchConfigTab('merge')">合并对账配置</button>
+                    </div>
+
+                    <!-- 客户对账配置 -->
+                    <div class="config-tab-content" data-tab="customer">
+                        <div class="filter-section">
+                            <div class="filter-row">
+                                <div class="filter-item">
+                                    <label>客户</label>
+                                    <div class="multi-select" id="cfg-cust-customer" style="width:180px">
+                                        <div class="multi-select-trigger" onclick="toggleMultiSelect(this)">
+                                            <span class="multi-select-placeholder" data-placeholder="请选择客户">请选择客户</span>
+                                            <span class="multi-select-arrow">▾</span>
+                                        </div>
+                                        <div class="multi-select-dropdown">
+                                            <input type="text" class="multi-select-search" placeholder="搜索..." oninput="filterMultiSelect(this)">
+                                            <div class="multi-select-options">
+                                                <label class="multi-select-option"><input type="checkbox" value="CUST-001 北京华大基因" onchange="updateMultiSelectLabel(this)"> CUST-001 北京华大基因</label>
+                                                <label class="multi-select-option"><input type="checkbox" value="CUST-002 上海药明康德" onchange="updateMultiSelectLabel(this)"> CUST-002 上海药明康德</label>
+                                                <label class="multi-select-option"><input type="checkbox" value="CUST-003 广州达安基因" onchange="updateMultiSelectLabel(this)"> CUST-003 广州达安基因</label>
+                                                <label class="multi-select-option"><input type="checkbox" value="CUST-004 深圳华大智造" onchange="updateMultiSelectLabel(this)"> CUST-004 深圳华大智造</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="filter-item">
+                                    <label>课题组</label>
+                                    <div class="multi-select" id="cfg-cust-group" style="width:180px">
+                                        <div class="multi-select-trigger" onclick="toggleMultiSelect(this)">
+                                            <span class="multi-select-placeholder" data-placeholder="请选择课题组">请选择课题组</span>
+                                            <span class="multi-select-arrow">▾</span>
+                                        </div>
+                                        <div class="multi-select-dropdown">
+                                            <input type="text" class="multi-select-search" placeholder="搜索..." oninput="filterMultiSelect(this)">
+                                            <div class="multi-select-options">
+                                                <label class="multi-select-option"><input type="checkbox" value="GP-001 张教授课题组" onchange="updateMultiSelectLabel(this)"> GP-001 张教授课题组</label>
+                                                <label class="multi-select-option"><input type="checkbox" value="GP-002 李教授课题组" onchange="updateMultiSelectLabel(this)"> GP-002 李教授课题组</label>
+                                                <label class="multi-select-option"><input type="checkbox" value="GP-003 王教授课题组" onchange="updateMultiSelectLabel(this)"> GP-003 王教授课题组</label>
+                                                <label class="multi-select-option"><input type="checkbox" value="GP-004 赵教授课题组" onchange="updateMultiSelectLabel(this)"> GP-004 赵教授课题组</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="filter-item">
+                                    <label>单位</label>
+                                    <div class="multi-select" id="cfg-cust-org" style="width:180px">
+                                        <div class="multi-select-trigger" onclick="toggleMultiSelect(this)">
+                                            <span class="multi-select-placeholder" data-placeholder="请选择单位">请选择单位</span>
+                                            <span class="multi-select-arrow">▾</span>
+                                        </div>
+                                        <div class="multi-select-dropdown">
+                                            <input type="text" class="multi-select-search" placeholder="搜索..." oninput="filterMultiSelect(this)">
+                                            <div class="multi-select-options">
+                                                <label class="multi-select-option"><input type="checkbox" value="ORG-001 北京科技有限公司" onchange="updateMultiSelectLabel(this)"> ORG-001 北京科技有限公司</label>
+                                                <label class="multi-select-option"><input type="checkbox" value="ORG-002 上海生物科技" onchange="updateMultiSelectLabel(this)"> ORG-002 上海生物科技</label>
+                                                <label class="multi-select-option"><input type="checkbox" value="ORG-003 广州医药集团" onchange="updateMultiSelectLabel(this)"> ORG-003 广州医药集团</label>
+                                                <label class="multi-select-option"><input type="checkbox" value="ORG-004 深圳医疗器械" onchange="updateMultiSelectLabel(this)"> ORG-004 深圳医疗器械</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="toolbar-section">
+                            <div class="toolbar-left">
+                                <button class="btn btn-primary" onclick="alert('查询')">查询</button>
+                                <button class="btn btn-outline" onclick="alert('重置')">重置</button>
+                                <button class="btn btn-outline" onclick="alert('导出')">导出</button>
+                                <button class="btn btn-outline" onclick="alert('导入')">导入</button>
+                                <button class="btn btn-primary" onclick="alert('批量修改配置项')">批量修改配置项</button>
+                                <button class="btn btn-outline" onclick="alert('编辑默认配置')">编辑默认配置</button>
+                            </div>
+                            <div class="toolbar-right">共 <span id="cfg-cust-count">8</span> 条记录</div>
+                        </div>
+                        <div class="table-container">
+                            <div class="table-scroll">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>客户ID</th>
+                                            <th>客户名称</th>
+                                            <th>课题组ID</th>
+                                            <th>课题组名称</th>
+                                            <th>单位ID</th>
+                                            <th>单位名称</th>
+                                            <th>更新时间</th>
+                                            <th>修改人</th>
+                                            <th class="sticky-col">操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>CUST-001</td>
+                                            <td>北京华大基因</td>
+                                            <td>GP-001</td>
+                                            <td>张教授课题组</td>
+                                            <td>ORG-001</td>
+                                            <td>北京科技有限公司</td>
+                                            <td>2026-03-15</td>
+                                            <td>系统管理员</td>
+                                            <td class="sticky-col"><button class="action-btn view" onclick="openCustConfigModal(this)">修改</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>CUST-002</td>
+                                            <td>上海药明康德</td>
+                                            <td>GP-002</td>
+                                            <td>李教授课题组</td>
+                                            <td>ORG-002</td>
+                                            <td>上海生物科技</td>
+                                            <td>2026-04-10</td>
+                                            <td>系统管理员</td>
+                                            <td class="sticky-col"><button class="action-btn view" onclick="openCustConfigModal(this)">修改</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>CUST-003</td>
+                                            <td>广州达安基因</td>
+                                            <td>GP-003</td>
+                                            <td>王教授课题组</td>
+                                            <td>ORG-003</td>
+                                            <td>广州医药集团</td>
+                                            <td>2026-02-28</td>
+                                            <td>张三</td>
+                                            <td class="sticky-col"><button class="action-btn view" onclick="openCustConfigModal(this)">修改</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>CUST-004</td>
+                                            <td>深圳华大智造</td>
+                                            <td>GP-004</td>
+                                            <td>赵教授课题组</td>
+                                            <td>ORG-004</td>
+                                            <td>深圳医疗器械</td>
+                                            <td>2026-05-20</td>
+                                            <td>张三</td>
+                                            <td class="sticky-col"><button class="action-btn view" onclick="openCustConfigModal(this)">修改</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="pagination">
+                                <span class="pagination-info">显示 1-4 条，共 8 条</span>
+                                <div class="pagination-right">
+                                    <span class="page-size-label">每页</span>
+                                    <select class="page-size-select"><option>10</option><option selected>20</option><option>50</option><option>100</option></select>
+                                    <span class="page-size-label">条</span>
+                                    <span class="pagination-divider">|</span>
+                                    <button class="page-btn" disabled>‹</button>
+                                    <button class="page-btn active">1</button>
+                                    <button class="page-btn">2</button>
+                                    <button class="page-btn">›</button>
+                                    <span class="pagination-divider">|</span>
+                                    <span class="page-size-label">跳至</span>
+                                    <input type="text" class="page-jump-input" value="1">
+                                    <button class="page-jump-btn btn btn-primary btn-sm">GO</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 合并对账配置 -->
+                    <div class="config-tab-content" data-tab="merge" style="display:none">
+                        <div class="filter-section">
+                            <div class="filter-row">
+                                <div class="filter-item">
+                                    <label>报账人</label>
+                                    <input type="text" placeholder="搜索报账人" style="width:160px" list="merge-biller-list">
+                                    <datalist id="merge-biller-list">
+                                        <option value="张会计">
+                                        <option value="李会计">
+                                        <option value="王会计">
+                                        <option value="赵会计">
+                                        <option value="陈会计">
+                                    </datalist>
+                                </div>
+                                <div class="filter-item">
+                                    <label>客户</label>
+                                    <div class="multi-select" id="cfg-merge-customer" style="width:180px">
+                                        <div class="multi-select-trigger" onclick="toggleMultiSelect(this)">
+                                            <span class="multi-select-placeholder" data-placeholder="请选择客户">请选择客户</span>
+                                            <span class="multi-select-arrow">▾</span>
+                                        </div>
+                                        <div class="multi-select-dropdown">
+                                            <input type="text" class="multi-select-search" placeholder="搜索..." oninput="filterMultiSelect(this)">
+                                            <div class="multi-select-options">
+                                                <label class="multi-select-option"><input type="checkbox" value="CUST-001 北京华大基因" onchange="updateMultiSelectLabel(this)"> CUST-001 北京华大基因</label>
+                                                <label class="multi-select-option"><input type="checkbox" value="CUST-002 上海药明康德" onchange="updateMultiSelectLabel(this)"> CUST-002 上海药明康德</label>
+                                                <label class="multi-select-option"><input type="checkbox" value="CUST-003 广州达安基因" onchange="updateMultiSelectLabel(this)"> CUST-003 广州达安基因</label>
+                                                <label class="multi-select-option"><input type="checkbox" value="CUST-004 深圳华大智造" onchange="updateMultiSelectLabel(this)"> CUST-004 深圳华大智造</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="filter-item">
+                                    <label>课题组</label>
+                                    <div class="multi-select" id="cfg-merge-group" style="width:180px">
+                                        <div class="multi-select-trigger" onclick="toggleMultiSelect(this)">
+                                            <span class="multi-select-placeholder" data-placeholder="请选择课题组">请选择课题组</span>
+                                            <span class="multi-select-arrow">▾</span>
+                                        </div>
+                                        <div class="multi-select-dropdown">
+                                            <input type="text" class="multi-select-search" placeholder="搜索..." oninput="filterMultiSelect(this)">
+                                            <div class="multi-select-options">
+                                                <label class="multi-select-option"><input type="checkbox" value="GP-001 张教授课题组" onchange="updateMultiSelectLabel(this)"> GP-001 张教授课题组</label>
+                                                <label class="multi-select-option"><input type="checkbox" value="GP-002 李教授课题组" onchange="updateMultiSelectLabel(this)"> GP-002 李教授课题组</label>
+                                                <label class="multi-select-option"><input type="checkbox" value="GP-003 王教授课题组" onchange="updateMultiSelectLabel(this)"> GP-003 王教授课题组</label>
+                                                <label class="multi-select-option"><input type="checkbox" value="GP-004 赵教授课题组" onchange="updateMultiSelectLabel(this)"> GP-004 赵教授课题组</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="filter-item">
+                                    <label>单位</label>
+                                    <div class="multi-select" id="cfg-merge-org" style="width:180px">
+                                        <div class="multi-select-trigger" onclick="toggleMultiSelect(this)">
+                                            <span class="multi-select-placeholder" data-placeholder="请选择单位">请选择单位</span>
+                                            <span class="multi-select-arrow">▾</span>
+                                        </div>
+                                        <div class="multi-select-dropdown">
+                                            <input type="text" class="multi-select-search" placeholder="搜索..." oninput="filterMultiSelect(this)">
+                                            <div class="multi-select-options">
+                                                <label class="multi-select-option"><input type="checkbox" value="ORG-001 北京科技有限公司" onchange="updateMultiSelectLabel(this)"> ORG-001 北京科技有限公司</label>
+                                                <label class="multi-select-option"><input type="checkbox" value="ORG-002 上海生物科技" onchange="updateMultiSelectLabel(this)"> ORG-002 上海生物科技</label>
+                                                <label class="multi-select-option"><input type="checkbox" value="ORG-003 广州医药集团" onchange="updateMultiSelectLabel(this)"> ORG-003 广州医药集团</label>
+                                                <label class="multi-select-option"><input type="checkbox" value="ORG-004 深圳医疗器械" onchange="updateMultiSelectLabel(this)"> ORG-004 深圳医疗器械</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="toolbar-section">
+                            <div class="toolbar-left">
+                                <button class="btn btn-primary" onclick="alert('查询')">查询</button>
+                                <button class="btn btn-outline" onclick="alert('重置')">重置</button>
+                                <button class="btn btn-outline" onclick="alert('导出')">导出</button>
+                                <button class="btn btn-outline" onclick="alert('导入')">导入</button>
+                                <button class="btn btn-primary" onclick="alert('批量修改配置项')">批量修改配置项</button>
+                                <button class="btn btn-primary" onclick="openMergeConfigModal()">添加</button>
+                            </div>
+                            <div class="toolbar-right">共 <span id="cfg-merge-count">3</span> 条记录</div>
+                        </div>
+                        <div class="table-container">
+                            <div class="table-scroll">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>报账人</th>
+                                            <th>客户名称</th>
+                                            <th>课题组名称</th>
+                                            <th>单位ID</th>
+                                            <th>单位名称</th>
+                                            <th>更新时间</th>
+                                            <th>修改人</th>
+                                            <th class="sticky-col">操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>张会计</td>
+                                            <td>
+                                                <div class="merge-value-list">
+                                                    <span class="merge-tag">北京华大基因</span>
+                                                    <span class="merge-tag">上海药明康德</span>
+                                                    <span class="merge-tag merge-hidden">广州达安基因</span>
+                                                    <span class="merge-expand-btn" onclick="openMergeExpandModal(this)">+1 更多</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="merge-value-list">
+                                                    <span class="merge-tag">张教授课题组</span>
+                                                    <span class="merge-tag">李教授课题组</span>
+                                                    <span class="merge-tag merge-hidden">王教授课题组</span>
+                                                    <span class="merge-tag merge-hidden">赵教授课题组</span>
+                                                    <span class="merge-expand-btn" onclick="openMergeExpandModal(this)">+2 更多</span>
+                                                </div>
+                                            </td>
+                                            <td>ORG-001</td>
+                                            <td>北京科技有限公司</td>
+                                            <td>2026-03-15</td>
+                                            <td>系统管理员</td>
+                                            <td class="sticky-col"><button class="action-btn view" onclick="alert('修改')">修改</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>李会计</td>
+                                            <td>
+                                                <div class="merge-value-list">
+                                                    <span class="merge-tag">深圳华大智造</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="merge-value-list">
+                                                    <span class="merge-tag">赵教授课题组</span>
+                                                </div>
+                                            </td>
+                                            <td>ORG-004</td>
+                                            <td>深圳医疗器械</td>
+                                            <td>2026-05-20</td>
+                                            <td>张三</td>
+                                            <td class="sticky-col"><button class="action-btn view" onclick="alert('修改')">修改</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>王会计</td>
+                                            <td>
+                                                <div class="merge-value-list">
+                                                    <span class="merge-tag">杭州博日科技</span>
+                                                    <span class="merge-tag">南京诺唯赞</span>
+                                                    <span class="merge-expand-btn" onclick="openMergeExpandModal(this)">收起</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="merge-value-list">
+                                                    <span class="merge-tag">陈教授课题组</span>
+                                                    <span class="merge-tag">刘教授课题组</span>
+                                                    <span class="merge-expand-btn" onclick="openMergeExpandModal(this)">收起</span>
+                                                </div>
+                                            </td>
+                                            <td>ORG-005</td>
+                                            <td>杭州生物技术</td>
+                                            <td>2026-04-18</td>
+                                            <td>系统管理员</td>
+                                            <td class="sticky-col"><button class="action-btn view" onclick="alert('修改')">修改</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="pagination">
+                                <span class="pagination-info">显示 1-3 条，共 3 条</span>
+                                <div class="pagination-right">
+                                    <span class="page-size-label">每页</span>
+                                    <select class="page-size-select"><option>10</option><option selected>20</option><option>50</option><option>100</option></select>
+                                    <span class="page-size-label">条</span>
+                                    <span class="pagination-divider">|</span>
+                                    <button class="page-btn" disabled>‹</button>
+                                    <button class="page-btn active">1</button>
+                                    <button class="page-btn">›</button>
+                                    <span class="pagination-divider">|</span>
+                                    <span class="page-size-label">跳至</span>
+                                    <input type="text" class="page-jump-input" value="1">
+                                    <button class="page-jump-btn btn btn-primary btn-sm">GO</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- ===== 回收站 ===== -->
                 <div id="page-recycle" class="page-content" style="display: none;">
                 </div>
@@ -438,17 +1103,302 @@
         </main>
     </div>
 
-    <div class="modal-overlay" id="modal">
-        <div class="modal">
+    <!-- 客户对账配置弹窗 -->
+    <div class="modal-overlay" id="custConfigModal" onclick="if(event.target===this)closeCustConfigModal()">
+        <div class="modal" style="max-width:720px">
             <div class="modal-header">
-                <h3 id="modal-title">新增账单</h3>
-                <button class="modal-close" onclick="closeModal()">×</button>
+                <h3>对账配置 - <span id="cust-config-title">客户名称</span></h3>
+                <button class="modal-close" onclick="closeCustConfigModal()">×</button>
             </div>
-            <div class="modal-body" id="modal-body">
+            <div class="modal-body">
+                <!-- 报账人信息 -->
+                <div class="config-edit-section">
+                    <h4>报账人信息</h4>
+                    <div class="config-edit-grid">
+                        <div class="form-group">
+                            <label>报账人姓名</label>
+                            <select style="width:100%">
+                                <option>请选择报账人</option>
+                                <option>张会计</option>
+                                <option>李会计</option>
+                                <option>王会计</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>报账人联系电话</label>
+                            <input type="text" placeholder="请输入联系电话" style="width:100%">
+                        </div>
+                        <div class="form-group">
+                            <label>报账人邮箱</label>
+                            <input type="email" placeholder="请输入邮箱地址" style="width:100%">
+                        </div>
+                        <div class="form-group">
+                            <label>报账人地址</label>
+                            <input type="text" placeholder="请输入地址" style="width:100%">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 报账时间配置 -->
+                <div class="config-edit-section">
+                    <h4>报账时间配置</h4>
+                    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px" id="cust-month-grid">
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" onchange="toggleCustMonth(this,'1')"> 1月
+                            <select disabled style="width:56px;padding:2px 4px;font-size:12px" id="cust-day-1">
+                                <option>1</option><option selected>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>28</option>
+                            </select>
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" onchange="toggleCustMonth(this,'2')"> 2月
+                            <select disabled style="width:56px;padding:2px 4px;font-size:12px" id="cust-day-2">
+                                <option>1</option><option selected>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>28</option>
+                            </select>
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" onchange="toggleCustMonth(this,'3')"> 3月
+                            <select disabled style="width:56px;padding:2px 4px;font-size:12px" id="cust-day-3">
+                                <option>1</option><option selected>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>28</option>
+                            </select>
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" onchange="toggleCustMonth(this,'4')"> 4月
+                            <select disabled style="width:56px;padding:2px 4px;font-size:12px" id="cust-day-4">
+                                <option>1</option><option selected>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>28</option>
+                            </select>
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" onchange="toggleCustMonth(this,'5')"> 5月
+                            <select disabled style="width:56px;padding:2px 4px;font-size:12px" id="cust-day-5">
+                                <option>1</option><option selected>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>28</option>
+                            </select>
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" onchange="toggleCustMonth(this,'6')"> 6月
+                            <select disabled style="width:56px;padding:2px 4px;font-size:12px" id="cust-day-6">
+                                <option>1</option><option selected>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>28</option>
+                            </select>
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" onchange="toggleCustMonth(this,'7')"> 7月
+                            <select disabled style="width:56px;padding:2px 4px;font-size:12px" id="cust-day-7">
+                                <option>1</option><option selected>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>28</option>
+                            </select>
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" onchange="toggleCustMonth(this,'8')"> 8月
+                            <select disabled style="width:56px;padding:2px 4px;font-size:12px" id="cust-day-8">
+                                <option>1</option><option selected>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>28</option>
+                            </select>
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" onchange="toggleCustMonth(this,'9')"> 9月
+                            <select disabled style="width:56px;padding:2px 4px;font-size:12px" id="cust-day-9">
+                                <option>1</option><option selected>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>28</option>
+                            </select>
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" onchange="toggleCustMonth(this,'10')"> 10月
+                            <select disabled style="width:56px;padding:2px 4px;font-size:12px" id="cust-day-10">
+                                <option>1</option><option selected>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>28</option>
+                            </select>
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" onchange="toggleCustMonth(this,'11')"> 11月
+                            <select disabled style="width:56px;padding:2px 4px;font-size:12px" id="cust-day-11">
+                                <option>1</option><option selected>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>28</option>
+                            </select>
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" onchange="toggleCustMonth(this,'12')"> 12月
+                            <select disabled style="width:56px;padding:2px 4px;font-size:12px" id="cust-day-12">
+                                <option>1</option><option selected>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>28</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 接收方式 -->
+                <div class="config-edit-section">
+                    <h4>接收方式</h4>
+                    <div style="display:flex;gap:20px;margin-top:8px">
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" checked> 邮件</label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox"> 附件</label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox"> 邮寄</label>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeModal()">取消</button>
-                <button class="btn btn-primary" onclick="saveModal()">保存</button>
+                <button class="btn btn-secondary" onclick="closeCustConfigModal()">取消</button>
+                <button class="btn btn-primary" onclick="alert('保存成功');closeCustConfigModal()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 合并对账多值编辑弹窗 -->
+    <div class="modal-overlay" id="mergeExpandModal" onclick="if(event.target===this)closeMergeExpandModal()">
+        <div class="modal" style="max-width:480px">
+            <div class="modal-header">
+                <h3><span id="merge-expand-title">客户名称</span></h3>
+                <button class="modal-close" onclick="closeMergeExpandModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="filter-item" style="margin-bottom:12px">
+                    <label>搜索添加</label>
+                    <input type="text" placeholder="搜索名称/ID 添加" style="width:100%" id="merge-expand-search" oninput="filterMergeExpandSearch(this)">
+                </div>
+                <div id="merge-expand-items" style="max-height:320px;overflow-y:auto;border:1px solid var(--border-color);border-radius:6px;padding:4px 0">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeMergeExpandModal()">取消</button>
+                <button class="btn btn-primary" onclick="saveMergeExpand()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加合并对账弹窗 -->
+    <div class="modal-overlay" id="mergeConfigModal" onclick="if(event.target===this)closeMergeConfigModal()">
+        <div class="modal" style="max-width:720px">
+            <div class="modal-header">
+                <h3>添加合并对账</h3>
+                <button class="modal-close" onclick="closeMergeConfigModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <!-- 客户选择区域 -->
+                <div class="config-edit-section">
+                    <h4>客户范围</h4>
+                    <div class="filter-row">
+                        <div class="filter-item">
+                            <label>搜索维度</label>
+                            <div class="dimension-radio-group" style="display:flex;gap:12px;margin-bottom:8px">
+                                <label style="display:flex;align-items:center;gap:4px;font-size:13px;cursor:pointer"><input type="radio" name="mergeSearchDim" value="customer" checked onchange="toggleMergeSearchDim(this.value)"> 客户维度</label>
+                                <label style="display:flex;align-items:center;gap:4px;font-size:13px;cursor:pointer"><input type="radio" name="mergeSearchDim" value="group" onchange="toggleMergeSearchDim(this.value)"> 课题组维度</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-row">
+                        <div class="filter-item" style="flex:1">
+                            <label>搜索客户</label>
+                            <input type="text" placeholder="输入客户名称/ID 搜索" style="width:100%">
+                        </div>
+                        <div class="filter-item" style="flex:1">
+                            <label>已选客户</label>
+                            <div class="multi-select" id="merge-modal-customer" style="width:100%">
+                                <div class="multi-select-trigger" onclick="toggleMultiSelect(this)">
+                                    <span class="multi-select-placeholder" data-placeholder="请选择客户">请选择客户</span>
+                                    <span class="multi-select-arrow">▾</span>
+                                </div>
+                                <div class="multi-select-dropdown">
+                                    <input type="text" class="multi-select-search" placeholder="搜索..." oninput="filterMultiSelect(this)">
+                                    <div class="multi-select-options">
+                                        <label class="multi-select-option"><input type="checkbox" value="CUST-001 北京华大基因" onchange="updateMultiSelectLabel(this)"> CUST-001 北京华大基因</label>
+                                        <label class="multi-select-option"><input type="checkbox" value="CUST-002 上海药明康德" onchange="updateMultiSelectLabel(this)"> CUST-002 上海药明康德</label>
+                                        <label class="multi-select-option"><input type="checkbox" value="CUST-003 广州达安基因" onchange="updateMultiSelectLabel(this)"> CUST-003 广州达安基因</label>
+                                        <label class="multi-select-option"><input type="checkbox" value="CUST-004 深圳华大智造" onchange="updateMultiSelectLabel(this)"> CUST-004 深圳华大智造</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 报账人信息 -->
+                <div class="config-edit-section">
+                    <h4>报账人信息</h4>
+                    <div class="config-edit-grid">
+                        <div class="form-group">
+                            <label>报账人姓名</label>
+                            <select style="width:100%">
+                                <option>请选择报账人</option>
+                                <option>张会计（北京华大基因）</option>
+                                <option>李会计（上海药明康德）</option>
+                                <option>王会计（广州达安基因）</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>报账人联系电话</label>
+                            <input type="text" placeholder="请输入联系电话" style="width:100%">
+                        </div>
+                        <div class="form-group">
+                            <label>报账人邮箱</label>
+                            <input type="email" placeholder="请输入邮箱地址" style="width:100%">
+                        </div>
+                        <div class="form-group">
+                            <label>报账人地址</label>
+                            <input type="text" placeholder="请输入地址" style="width:100%">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 报账时间配置 -->
+                <div class="config-edit-section">
+                    <h4>报账时间配置</h4>
+                    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px" id="merge-month-grid">
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" onchange="toggleMergeMonth(this,'1')"> 1月
+                            <select disabled style="width:56px;padding:2px 4px;font-size:12px" id="mm-day-1">
+                                <option>1</option><option selected>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>28</option>
+                            </select>
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" onchange="toggleMergeMonth(this,'2')"> 2月
+                            <select disabled style="width:56px;padding:2px 4px;font-size:12px" id="mm-day-2">
+                                <option>1</option><option selected>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>28</option>
+                            </select>
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" onchange="toggleMergeMonth(this,'3')"> 3月
+                            <select disabled style="width:56px;padding:2px 4px;font-size:12px" id="mm-day-3">
+                                <option>1</option><option selected>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>28</option>
+                            </select>
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" onchange="toggleMergeMonth(this,'4')"> 4月
+                            <select disabled style="width:56px;padding:2px 4px;font-size:12px" id="mm-day-4">
+                                <option>1</option><option selected>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>28</option>
+                            </select>
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" onchange="toggleMergeMonth(this,'5')"> 5月
+                            <select disabled style="width:56px;padding:2px 4px;font-size:12px" id="mm-day-5">
+                                <option>1</option><option selected>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>28</option>
+                            </select>
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" onchange="toggleMergeMonth(this,'6')"> 6月
+                            <select disabled style="width:56px;padding:2px 4px;font-size:12px" id="mm-day-6">
+                                <option>1</option><option selected>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>28</option>
+                            </select>
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" onchange="toggleMergeMonth(this,'7')"> 7月
+                            <select disabled style="width:56px;padding:2px 4px;font-size:12px" id="mm-day-7">
+                                <option>1</option><option selected>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>28</option>
+                            </select>
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" onchange="toggleMergeMonth(this,'8')"> 8月
+                            <select disabled style="width:56px;padding:2px 4px;font-size:12px" id="mm-day-8">
+                                <option>1</option><option selected>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>28</option>
+                            </select>
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" onchange="toggleMergeMonth(this,'9')"> 9月
+                            <select disabled style="width:56px;padding:2px 4px;font-size:12px" id="mm-day-9">
+                                <option>1</option><option selected>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>28</option>
+                            </select>
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" onchange="toggleMergeMonth(this,'10')"> 10月
+                            <select disabled style="width:56px;padding:2px 4px;font-size:12px" id="mm-day-10">
+                                <option>1</option><option selected>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>28</option>
+                            </select>
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" onchange="toggleMergeMonth(this,'11')"> 11月
+                            <select disabled style="width:56px;padding:2px 4px;font-size:12px" id="mm-day-11">
+                                <option>1</option><option selected>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>28</option>
+                            </select>
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" onchange="toggleMergeMonth(this,'12')"> 12月
+                            <select disabled style="width:56px;padding:2px 4px;font-size:12px" id="mm-day-12">
+                                <option>1</option><option selected>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>28</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 接收方式 -->
+                <div class="config-edit-section">
+                    <h4>接收方式</h4>
+                    <div style="display:flex;gap:20px;margin-top:8px">
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" checked> 邮件</label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox"> 附件</label>
+                        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox"> 邮寄</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeMergeConfigModal()">取消</button>
+                <button class="btn btn-primary" onclick="alert('保存成功');closeMergeConfigModal()">保存</button>
             </div>
         </div>
     </div>
@@ -493,463 +1443,19 @@
         </div>
     </div>
 
-    <!-- 侧边详情面板 -->
-    <div class="side-panel-overlay" id="sidePanel" onclick="if(event.target===this)closeSidePanel()">
-        <div class="side-panel">
-            <div class="side-panel-header">
-                <h3>订单列表 - <span id="panel-title">北京科技有限公司</span></h3>
-                <button class="modal-close" onclick="closeSidePanel()">×</button>
-            </div>
-            <div class="side-panel-body">
-                <div class="filter-section" style="margin-bottom:16px;flex-shrink:0">
-                    <div class="filter-row" style="margin-bottom:0">
-                        <div class="filter-item">
-                            <label>订单状态</label>
-                            <select id="order-filter-status">
-                                <option value="">全部</option>
-                                <option value="in-progress">进行中</option>
-                                <option value="pending-receipt">待签收</option>
-                                <option value="pending-rate">待计算汇率</option>
-                                <option value="pending-confirm">待确认结单</option>
-                                <option value="completed">结单</option>
-                                <option value="cancelled">取消</option>
-                            </select>
-                        </div>
-                        <div class="filter-item">
-                            <label>客户</label>
-                            <select id="order-filter-customer">
-                                <option value="">全部</option>
-                                <option>北京华大基因</option>
-                                <option>上海药明康德</option>
-                                <option>广州达安基因</option>
-                                <option>深圳华大智造</option>
-                            </select>
-                        </div>
-                        <div class="filter-item">
-                            <label>对账状态</label>
-                            <select id="order-filter-recon-status">
-                                <option value="">全部</option>
-                                <option value="unbilled">未入账</option>
-                                <option value="pending">待对账</option>
-                                <option value="done">已对账</option>
-                            </select>
-                        </div>
-                        <div class="filter-item">
-                            <label>开始日期</label>
-                            <input type="date" id="order-filter-date-start">
-                        </div>
-                        <div class="filter-item">
-                            <label>结束日期</label>
-                            <input type="date" id="order-filter-date-end">
-                        </div>
-                        <div class="filter-item">
-                            <label>&nbsp;</label>
-                            <div class="search-box">
-                                <input type="text" id="order-filter-search" placeholder="搜索订单号..." style="width:160px">
-                            </div>
-                        </div>
-                        <div class="filter-item" style="justify-content:flex-end">
-                            <label>&nbsp;</label>
-                            <button class="btn btn-primary" onclick="filterOrders()" style="height:38px">查询</button>
-                            <button class="btn btn-outline" onclick="exportOrders()" style="height:38px">导出</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="dimension-tabs" style="margin-bottom:12px;width:100%">
-                    <button class="dimension-tab active" onclick="switchOrderTab(this,'全部')">全部</button>
-                    <button class="dimension-tab" onclick="switchOrderTab(this,'服务')">服务</button>
-                    <button class="dimension-tab" onclick="switchOrderTab(this,'产品')">产品</button>
-                </div>
-                <div class="table-container">
-                    <div class="table-header">
-                        <div class="table-header-left">共 <span id="order-count">6</span> 条记录</div>
-                    </div>
-                    <div class="table-scroll">
-                        <table class="data-table" id="order-detail-table">
-                            <thead>
-                                <tr>
-                                    <th>订单号</th>
-                                    <th>订单状态</th>
-                                    <th>对账状态</th>
-                                    <th>结算基地</th>
-                                    <th>客户</th>
-                                    <th>开票流程</th>
-                                    <th>追款人</th>
-                                    <th>业务员</th>
-                                    <th>订单日期</th>
-                                    <th>结单月份</th>
-                                    <th>发货地址</th>
-                                    <th>开票单位</th>
-                                    <th>订单类型</th>
-                                    <th>数量</th>
-                                    <th>折扣前含税单价</th>
-                                    <th>折扣后含税单价</th>
-                                    <th>折扣前含税总价</th>
-                                    <th>折扣金额</th>
-                                    <th>折扣后含税总价</th>
-                                    <th>计量单位</th>
-                                    <th>备注</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr data-order-type="服务">
-                                    <td>ORD-2024-0156</td>
-                                    <td><span class="badge badge-in-progress">进行中</span></td>
-                                    <td><span class="badge badge-warning">待对账</span></td>
-                                    <td>北京基地</td>
-                                    <td>北京华大基因</td>
-                                    <td>标准开票</td>
-                                    <td>李四</td>
-                                    <td>王五</td>
-                                    <td>2024-01-10</td>
-                                    <td>2024-01</td>
-                                    <td>北京市海淀区中关村</td>
-                                    <td>北京科技有限公司</td>
-                                    <td>服务</td>
-                                    <td>100</td>
-                                    <td>¥150.00</td>
-                                    <td>¥145.00</td>
-                                    <td>¥15,000.00</td>
-                                    <td>¥500.00</td>
-                                    <td>¥14,500.00</td>
-                                    <td>个</td>
-                                    <td>-</td>
-                                </tr>
-                                <tr data-order-type="产品">
-                                    <td>ORD-2024-0157</td>
-                                    <td><span class="badge badge-pending-receipt">待签收</span></td>
-                                    <td><span class="badge badge-warning">待对账</span></td>
-                                    <td>上海基地</td>
-                                    <td>上海药明康德</td>
-                                    <td>急单开票</td>
-                                    <td>赵六</td>
-                                    <td>陈七</td>
-                                    <td>2024-01-11</td>
-                                    <td>2024-01</td>
-                                    <td>上海市浦东新区张江</td>
-                                    <td>上海生物科技</td>
-                                    <td>产品</td>
-                                    <td>50</td>
-                                    <td>¥280.00</td>
-                                    <td>¥260.00</td>
-                                    <td>¥14,000.00</td>
-                                    <td>¥1,000.00</td>
-                                    <td>¥13,000.00</td>
-                                    <td>件</td>
-                                    <td>需加急处理</td>
-                                </tr>
-                                <tr data-order-type="产品">
-                                    <td>ORD-2024-0158</td>
-                                    <td><span class="badge badge-pending-rate">待计算汇率</span></td>
-                                    <td><span class="badge badge-warning">待对账</span></td>
-                                    <td>广州基地</td>
-                                    <td>广州达安基因</td>
-                                    <td>外币开票</td>
-                                    <td>周八</td>
-                                    <td>吴九</td>
-                                    <td>2024-01-12</td>
-                                    <td>2024-01</td>
-                                    <td>广州市黄埔区科学城</td>
-                                    <td>广州医药集团</td>
-                                    <td>产品</td>
-                                    <td>200</td>
-                                    <td>¥75.00</td>
-                                    <td>¥72.00</td>
-                                    <td>¥15,000.00</td>
-                                    <td>¥600.00</td>
-                                    <td>¥14,400.00</td>
-                                    <td>套</td>
-                                    <td>汇率待确认</td>
-                                </tr>
-                                <tr data-order-type="服务">
-                                    <td>ORD-2024-0159</td>
-                                    <td><span class="badge badge-pending-confirm">待确认结单</span></td>
-                                    <td><span class="badge badge-info">未入账</span></td>
-                                    <td>深圳基地</td>
-                                    <td>深圳华大智造</td>
-                                    <td>标准开票</td>
-                                    <td>郑十</td>
-                                    <td>钱十一</td>
-                                    <td>2024-01-13</td>
-                                    <td>2024-02</td>
-                                    <td>深圳市南山区科技园</td>
-                                    <td>深圳医疗器械</td>
-                                    <td>服务</td>
-                                    <td>30</td>
-                                    <td>¥520.00</td>
-                                    <td>¥500.00</td>
-                                    <td>¥15,600.00</td>
-                                    <td>¥600.00</td>
-                                    <td>¥15,000.00</td>
-                                    <td>台</td>
-                                    <td>客户确认中</td>
-                                </tr>
-                                <tr data-order-type="服务">
-                                    <td>ORD-2024-0160</td>
-                                    <td><span class="badge badge-completed">结单</span></td>
-                                    <td><span class="badge badge-success">已对账</span></td>
-                                    <td>北京基地</td>
-                                    <td>北京华大基因</td>
-                                    <td>标准开票</td>
-                                    <td>李四</td>
-                                    <td>王五</td>
-                                    <td>2024-01-05</td>
-                                    <td>2024-01</td>
-                                    <td>北京市昌平区生命园</td>
-                                    <td>北京科技有限公司</td>
-                                    <td>服务</td>
-                                    <td>80</td>
-                                    <td>¥200.00</td>
-                                    <td>¥195.00</td>
-                                    <td>¥16,000.00</td>
-                                    <td>¥400.00</td>
-                                    <td>¥15,600.00</td>
-                                    <td>个</td>
-                                    <td>-</td>
-                                </tr>
-                                <tr data-order-type="产品">
-                                    <td>ORD-2024-0161</td>
-                                    <td><span class="badge badge-cancelled">取消</span></td>
-                                    <td><span class="badge badge-info">未入账</span></td>
-                                    <td>上海基地</td>
-                                    <td>上海药明康德</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>陈七</td>
-                                    <td>2024-01-08</td>
-                                    <td>-</td>
-                                    <td>上海市徐汇区漕河泾</td>
-                                    <td>上海生物科技</td>
-                                    <td>产品</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>客户取消</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="pagination">
-                        <span class="pagination-info">显示 1-6 条，共 6 条</span>
-                        <button disabled>‹</button>
-                        <button class="active">1</button>
-                        <button>›</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- 对账单详情侧面板 -->
-    <div class="side-panel-overlay" id="statementDetailPanel" onclick="if(event.target===this)closeStatementDetailPanel()">
-        <div class="side-panel side-panel-wide">
-            <div class="side-panel-header">
-                <h3>对账单详情 - <span id="st-panel-title">BILL-001</span></h3>
-                <button class="modal-close" onclick="closeStatementDetailPanel()">×</button>
-            </div>
-            <div class="side-panel-body">
-                <div class="filter-section" style="margin-bottom:16px;flex-shrink:0">
-                    <div class="filter-row" style="margin-bottom:0">
-                        <div class="filter-item">
-                            <label>订单状态</label>
-                            <select id="st-order-filter-status">
-                                <option value="">全部</option>
-                                <option value="in-progress">进行中</option>
-                                <option value="pending-receipt">待签收</option>
-                                <option value="pending-rate">待计算汇率</option>
-                                <option value="pending-confirm">待确认结单</option>
-                                <option value="completed">结单</option>
-                                <option value="cancelled">取消</option>
-                            </select>
-                        </div>
-                        <div class="filter-item">
-                            <label>客户</label>
-                            <select id="st-order-filter-customer">
-                                <option value="">全部</option>
-                                <option>北京华大基因</option>
-                                <option>上海药明康德</option>
-                                <option>广州达安基因</option>
-                                <option>深圳华大智造</option>
-                            </select>
-                        </div>
-                        <div class="filter-item">
-                            <label>日期范围</label>
-                            <input type="date" id="st-order-filter-date-start">
-                        </div>
-                        <div class="filter-item">
-                            <label>至</label>
-                            <input type="date" id="st-order-filter-date-end">
-                        </div>
-                        <div class="filter-item">
-                            <label>&nbsp;</label>
-                            <div class="search-box">
-                                <input type="text" id="st-order-filter-search" placeholder="搜索订单号..." style="width:160px">
-                            </div>
-                        </div>
-                        <div class="filter-item" style="justify-content:flex-end">
-                            <label>&nbsp;</label>
-                            <button class="btn btn-primary" onclick="filterStatementOrders()" style="height:38px">查询</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="table-container">
-                    <div class="table-header">
-                        <div class="table-header-left">共 <span id="st-order-count">4</span> 条记录</div>
-                    </div>
-                    <div class="table-scroll">
-                        <table class="data-table" id="st-order-detail-table">
-                            <thead>
-                                <tr>
-                                    <th>订单号</th>
-                                    <th>订单状态</th>
-                                    <th>对账状态</th>
-                                    <th>订单类型</th>
-                                    <th>客户</th>
-                                    <th>订单日期</th>
-                                    <th>折扣后含税总价</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>ORD-2026-0101</td>
-                                    <td><span class="badge badge-completed">结单</span></td>
-                                    <td><span class="badge badge-success">已对账</span></td>
-                                    <td>服务</td>
-                                    <td>北京华大基因</td>
-                                    <td>2026-01-15</td>
-                                    <td>¥45,000.00</td>
-                                </tr>
-                                <tr>
-                                    <td>ORD-2026-0102</td>
-                                    <td><span class="badge badge-completed">结单</span></td>
-                                    <td><span class="badge badge-success">已对账</span></td>
-                                    <td>服务</td>
-                                    <td>北京华大基因</td>
-                                    <td>2026-02-20</td>
-                                    <td>¥38,500.00</td>
-                                </tr>
-                                <tr>
-                                    <td>ORD-2026-0103</td>
-                                    <td><span class="badge badge-pending-confirm">待确认结单</span></td>
-                                    <td><span class="badge badge-warning">待对账</span></td>
-                                    <td>产品</td>
-                                    <td>上海药明康德</td>
-                                    <td>2026-03-10</td>
-                                    <td>¥22,300.00</td>
-                                </tr>
-                                <tr>
-                                    <td>ORD-2026-0104</td>
-                                    <td><span class="badge badge-in-progress">进行中</span></td>
-                                    <td><span class="badge badge-info">未入账</span></td>
-                                    <td>产品</td>
-                                    <td>广州达安基因</td>
-                                    <td>2026-03-25</td>
-                                    <td>¥15,000.00</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="pagination">
-                        <span class="pagination-info">显示 1-4 条，共 4 条</span>
-                        <button disabled>‹</button>
-                        <button class="active">1</button>
-                        <button>›</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <script>
-        var sidePanelBodyHTML = '';
-        var _mergeRowCounter = 0;
-
         document.addEventListener('DOMContentLoaded', function() {
-            initNavigation();
-            initTableSorting();
-            initColumnToggle();
-            initThemeToggle();
-
-            sidePanelBodyHTML = document.querySelector('.side-panel-body').innerHTML;
-
             showPage('overview-intro');
+            initThemeToggle();
         });
 
-        function initNavigation() {
-            var navItems = document.querySelectorAll('.nav-item-header');
-            navItems.forEach(function(item) {
-                item.addEventListener('click', function() {
-                    var menu = this.dataset.menu;
-                    
-                    document.querySelectorAll('.nav-item-header').forEach(function(el) {
-                        el.classList.remove('active');
-                    });
-                    this.classList.add('active');
-
-                    if (menu === 'billing') {
-                        this.parentElement.classList.add('expanded');
-                        showPage('unbilled');
-                        updateBreadcrumb('账单');
-                    } else {
-                        document.querySelectorAll('.nav-item').forEach(function(el) {
-                            el.classList.remove('expanded');
-                        });
-                        document.querySelectorAll('.nav-subitem').forEach(function(el) {
-                            el.classList.remove('active');
-                        });
-                    }
-                });
-            });
-
-            var subItems = document.querySelectorAll('.nav-subitem');
-            subItems.forEach(function(item) {
-                item.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    
-                    document.querySelectorAll('.nav-subitem').forEach(function(el) {
-                        el.classList.remove('active');
-                    });
-                    this.classList.add('active');
-
-                    var submenu = this.dataset.submenu;
-                    showPage(submenu);
-                    
-                    var titles = {
-                        'unbilled': '账单',
-                        'statement': '对账单',
-                        'config': '账单配置'
-                    };
-                    updateBreadcrumb(titles[submenu]);
-                });
-            });
-        }
-
         function showPage(pageName) {
-            var iframe = document.getElementById('page-iframe');
-            var billingPages = ['unbilled', 'statement', 'config'];
-
-            if (billingPages.indexOf(pageName) !== -1) {
-                // 账单页面：隐藏内联内容，显示 iframe
-                document.querySelectorAll('.page-content').forEach(function(el) {
-                    el.style.display = 'none';
-                });
-                iframe.style.display = 'block';
-                var urls = { 'unbilled': 'unbilled.html', 'statement': 'reconciliation.html', 'config': 'config.html' };
-                if (!iframe.src || iframe.src.indexOf(urls[pageName]) === -1) {
-                    iframe.src = urls[pageName];
-                }
-            } else {
-                // 内容页面：隐藏 iframe，显示内联内容
-                iframe.style.display = 'none';
-                document.querySelectorAll('.page-content').forEach(function(el) {
-                    el.style.display = 'none';
-                });
-                document.getElementById('page-' + pageName).style.display = 'block';
-            }
+            document.querySelectorAll('.page-content').forEach(function(el) {
+                el.style.display = 'none';
+            });
+            document.getElementById('page-' + pageName).style.display = 'block';
 
             // 更新 Axure 导航选中状态
             document.querySelectorAll('.axure-page').forEach(function(el) {
@@ -958,36 +1464,24 @@
             var axurePage = document.querySelector('.axure-page[data-axure-page="' + pageName + '"]');
             if (axurePage) axurePage.classList.add('active');
 
-            // 控制左侧导航和顶部栏显隐
-            var hideNavPages = ['overview-intro', 'overview-revision', 'overview-history', 'overview-risk', 'overview-acceptance', 'scene-v1', 'recycle'];
-            document.querySelector('.app-container').classList.toggle('hide-nav', hideNavPages.indexOf(pageName) !== -1);
-
-            // 更新左侧 Sidebar 账单管理选中状态
-            var sidebarMap = { 'unbilled': 'unbilled', 'statement': 'statement', 'config': 'config' };
-            if (sidebarMap[pageName]) {
-                document.querySelectorAll('.nav-subitem').forEach(function(el) { el.classList.remove('active'); });
-                var si = document.querySelector('.nav-subitem[data-submenu="' + sidebarMap[pageName] + '"]');
-                if (si) si.classList.add('active');
-            }
+            // 内容页面隐藏侧栏
+            var contentPages = ['overview-intro', 'overview-revision', 'overview-history', 'overview-risk', 'overview-acceptance', 'scene-v1', 'unbilled', 'billed', 'bill-config', 'recycle'];
+            document.querySelector('.app-container').classList.toggle('hide-nav', contentPages.indexOf(pageName) !== -1);
 
             // 更新面包屑
             var titles = {
-                'unbilled': '未出账账单',
-                'statement': '对账单',
-                'config': '对账要求配置',
                 'overview-intro': '项目简介-简介',
                 'overview-revision': '项目简介-修订记录',
                 'overview-history': '项目简介-历史数据',
                 'overview-risk': '项目简介-上线风险',
                 'overview-acceptance': '项目简介-验收重点',
                 'scene-v1': 'V1版本业务场景&流程',
+                'unbilled': '未出账账单',
+                'billed': '已出账账单',
+                'bill-config': '账单配置',
                 'recycle': '回收站'
             };
             document.getElementById('breadcrumb-current').textContent = titles[pageName] || pageName;
-        }
-
-        function updateBreadcrumb(title) {
-            document.getElementById('breadcrumb-current').textContent = title;
         }
 
         /* ===== Axure 导航交互 ===== */
@@ -999,63 +1493,6 @@
             showPage(pageName);
         }
 
-        function initTableSorting() {
-            var tables = document.querySelectorAll('.data-table');
-            tables.forEach(function(table) {
-                var headers = table.querySelectorAll('th.sortable');
-                headers.forEach(function(header) {
-                    header.addEventListener('click', function() {
-                        var currentSort = this.dataset.sort;
-                        var currentOrder = this.classList.contains('sort-asc') ? 'desc' : 'asc';
-                        
-                        headers.forEach(function(h) {
-                            h.classList.remove('sort-asc', 'sort-desc');
-                        });
-                        
-                        this.classList.add('sort-' + currentOrder);
-                        alert('排序字段: ' + currentSort + ', 排序方式: ' + (currentOrder === 'asc' ? '升序' : '降序'));
-                    });
-                });
-            });
-        }
-
-        function initColumnToggle() {
-            var toggles = document.querySelectorAll('.columns-toggle');
-            toggles.forEach(function(toggle) {
-                toggle.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    this.classList.toggle('active');
-                });
-            });
-
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.columns-toggle')) {
-                    document.querySelectorAll('.columns-toggle').forEach(function(el) {
-                        el.classList.remove('active');
-                    });
-                }
-            });
-
-            var checkboxes = document.querySelectorAll('.column-checkbox input');
-            checkboxes.forEach(function(checkbox) {
-                checkbox.addEventListener('change', function() {
-                    var colIndex = parseInt(this.id.split('-').pop()) - 1;
-                    var tableId = this.closest('.columns-dropdown').parentElement.id.replace('-columns-toggle', '-table');
-                    var table = document.getElementById(tableId);
-                    
-                    if (table) {
-                        var rows = table.querySelectorAll('tr');
-                        rows.forEach(function(row) {
-                            var cells = row.querySelectorAll('td, th');
-                            if (cells[colIndex]) {
-                                cells[colIndex].style.display = this.checked ? '' : 'none';
-                            }
-                        }.bind(this));
-                    }
-                });
-            });
-        }
-
         function initThemeToggle() {
             var toggle = document.getElementById('themeToggle');
             toggle.addEventListener('click', function() {
@@ -1064,452 +1501,7 @@
             });
         }
 
-        function applyFilter(page) {
-            alert('应用筛选条件: ' + page);
-        }
-
-        function resetFilter(page) {
-            var inputs = document.querySelectorAll('[id^="' + page + '"]');
-            inputs.forEach(function(input) {
-                if (input.type === 'text' || input.type === 'date' || input.type === 'month') {
-                    input.value = '';
-                } else if (input.tagName === 'SELECT') {
-                    input.selectedIndex = 0;
-                }
-            });
-        }
-
-        function openModal(type) {
-            var modal = document.getElementById('modal');
-            var title = document.getElementById('modal-title');
-            var body = document.getElementById('modal-body');
-            
-            var titles = {
-                'add-unbilled': '新增账单',
-                'edit-unbilled': '编辑账单',
-                'view-unbilled': '查看账单',
-                'add-statement': '生成对账单',
-                'edit-statement': '对账操作',
-                'view-statement': '查看对账单',
-            };
-            
-            title.textContent = titles[type];
-            
-            body.innerHTML = getModalContent(type);
-            modal.classList.add('active');
-        }
-
-        function getModalContent(type) {
-            var content = '';
-            
-            if (type.includes('unbilled')) {
-                content = `
-                    <div class="form-group">
-                        <label>账单号</label>
-                        <input type="text" placeholder="自动生成">
-                    </div>
-                    <div class="form-group">
-                        <label>客户名称</label>
-                        <select>
-                            <option>北京科技有限公司</option>
-                            <option>上海生物科技</option>
-                            <option>广州医药集团</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>金额</label>
-                        <input type="number" placeholder="请输入金额">
-                    </div>
-                    <div class="form-group">
-                        <label>日期</label>
-                        <input type="date">
-                    </div>
-                    <div class="form-group">
-                        <label>备注</label>
-                        <textarea placeholder="请输入备注信息"></textarea>
-                    </div>
-                `;
-            } else if (type.includes('statement')) {
-                content = `
-                    <div class="form-group">
-                        <label>对账单号</label>
-                        <input type="text" placeholder="自动生成">
-                    </div>
-                    <div class="form-group">
-                        <label>客户名称</label>
-                        <select>
-                            <option>北京科技有限公司</option>
-                            <option>上海生物科技</option>
-                            <option>广州医药集团</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>对账周期</label>
-                        <input type="month">
-                    </div>
-                    <div class="form-group">
-                        <label>对账状态</label>
-                        <select>
-                            <option>待对账</option>
-                            <option>已确认</option>
-                            <option>有争议</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>备注</label>
-                        <textarea placeholder="请输入对账备注"></textarea>
-                    </div>
-                `;
-            }
-            
-            return content;
-        }
-
-        function closeModal() {
-            document.getElementById('modal').classList.remove('active');
-        }
-
-        function saveModal() {
-            alert('保存成功');
-            closeModal();
-        }
-
-        /* ===== 维度切换 ===== */
-        function switchDimension(dim) {
-            document.querySelectorAll('.dimension-tab').forEach(function(t) {
-                t.classList.remove('active');
-            });
-            document.querySelector('.dimension-tab[data-dimension="' + dim + '"]').classList.add('active');
-
-            document.querySelectorAll('.dimension-table').forEach(function(t) {
-                t.classList.remove('active');
-            });
-            document.getElementById('table-' + dim).classList.add('active');
-
-            var labels = {
-                'company': { label: '单位名称', title: '筛选条件' },
-                'group': { label: '课题组名称', title: '筛选条件' },
-                'customer': { label: '客户名称', title: '筛选条件' }
-            };
-            document.getElementById('dimension-filter-label').textContent = labels[dim].label;
-        }
-
-        /* ===== 侧边面板 ===== */
-        function openSidePanel(title) {
-            document.getElementById('panel-title').textContent = title;
-            document.getElementById('sidePanel').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeSidePanel() {
-            document.getElementById('sidePanel').classList.remove('active');
-            document.body.style.overflow = '';
-            if (sidePanelBodyHTML) {
-                document.querySelector('.side-panel-body').innerHTML = sidePanelBodyHTML;
-            }
-        }
-
-        /* ===== 对账单详情侧边面板 ===== */
-        function openStatementDetailPanel(billId) {
-            document.getElementById('st-panel-title').textContent = billId;
-            document.getElementById('statementDetailPanel').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeStatementDetailPanel() {
-            document.getElementById('statementDetailPanel').classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        function filterStatementOrders() {
-            var status = document.getElementById('st-order-filter-status').value;
-            var customer = document.getElementById('st-order-filter-customer').value;
-            var dateStart = document.getElementById('st-order-filter-date-start').value;
-            var dateEnd = document.getElementById('st-order-filter-date-end').value;
-            var keyword = document.getElementById('st-order-filter-search').value.toLowerCase();
-            var rows = document.querySelectorAll('#st-order-detail-table tbody tr');
-            var visibleCount = 0;
-
-            rows.forEach(function(row) {
-                var show = true;
-                if (status) {
-                    var badge = row.querySelector('.badge');
-                    var statusMap = {
-                        'in-progress': '进行中',
-                        'pending-receipt': '待签收',
-                        'pending-rate': '待计算汇率',
-                        'pending-confirm': '待确认结单',
-                        'completed': '结单',
-                        'cancelled': '取消'
-                    };
-                    if (badge && badge.textContent !== statusMap[status]) show = false;
-                }
-                if (show && customer) {
-                    var cells = row.querySelectorAll('td');
-                    if (cells[4] && cells[4].textContent !== customer) show = false;
-                }
-                if (show && dateStart) {
-                    var cells = row.querySelectorAll('td');
-                    if (cells[5] && cells[5].textContent < dateStart) show = false;
-                }
-                if (show && dateEnd) {
-                    var cells = row.querySelectorAll('td');
-                    if (cells[5] && cells[5].textContent > dateEnd) show = false;
-                }
-                if (show && keyword) {
-                    var cells = row.querySelectorAll('td');
-                    if (cells[0] && !cells[0].textContent.toLowerCase().includes(keyword)) show = false;
-                }
-                row.style.display = show ? '' : 'none';
-                if (show) visibleCount++;
-            });
-
-            document.getElementById('st-order-count').textContent = visibleCount;
-        }
-
-        function filterOrders() {
-            var status = document.getElementById('order-filter-status').value;
-            var customer = document.getElementById('order-filter-customer').value;
-            var reconStatus = document.getElementById('order-filter-recon-status').value;
-            var dateStart = document.getElementById('order-filter-date-start').value;
-            var dateEnd = document.getElementById('order-filter-date-end').value;
-            var keyword = document.getElementById('order-filter-search').value.toLowerCase();
-            var rows = document.querySelectorAll('#order-detail-table tbody tr');
-            var visibleCount = 0;
-
-            rows.forEach(function(row) {
-                var show = true;
-                if (status) {
-                    var badge = row.querySelector('.badge');
-                    var statusMap = {
-                        'in-progress': '进行中',
-                        'pending-receipt': '待签收',
-                        'pending-rate': '待计算汇率',
-                        'pending-confirm': '待确认结单',
-                        'completed': '结单',
-                        'cancelled': '取消'
-                    };
-                    if (badge && badge.textContent !== statusMap[status]) show = false;
-                }
-                if (show && customer) {
-                    var cells = row.querySelectorAll('td');
-                    if (cells[4] && cells[4].textContent !== customer) show = false;
-                }
-                if (show && reconStatus) {
-                    var cells = row.querySelectorAll('td');
-                    var reconMap = { 'unbilled': '未入账', 'pending': '待对账', 'done': '已对账' };
-                    if (cells[2] && cells[2].textContent !== reconMap[reconStatus]) show = false;
-                }
-                if (show && dateStart) {
-                    var cells = row.querySelectorAll('td');
-                    if (cells[8] && cells[8].textContent < dateStart) show = false;
-                }
-                if (show && dateEnd) {
-                    var cells = row.querySelectorAll('td');
-                    if (cells[8] && cells[8].textContent > dateEnd) show = false;
-                }
-                if (show && keyword) {
-                    var cells = row.querySelectorAll('td');
-                    if (cells[0] && !cells[0].textContent.toLowerCase().includes(keyword)) show = false;
-                }
-                row.style.display = show ? '' : 'none';
-                if (show) visibleCount++;
-            });
-
-            document.getElementById('order-count').textContent = visibleCount;
-        }
-
-        function exportOrders() {
-            alert('导出功能（模拟）');
-        }
-
-        /* ===== 订单分类标签切换 ===== */
-        function switchOrderTab(btn, type) {
-            document.querySelectorAll('.side-panel-body .dimension-tab').forEach(function(t) { t.classList.remove('active'); });
-            btn.classList.add('active');
-            var rows = document.querySelectorAll('#order-detail-table tbody tr');
-            rows.forEach(function(row) {
-                if (type === '全部') {
-                    row.style.display = '';
-                } else {
-                    row.style.display = row.getAttribute('data-order-type') === type ? '' : 'none';
-                }
-            });
-        }
-
-        /* ===== 对账单维度切换 ===== */
-        function switchStatementDimension(dim) {
-            var tabs = document.querySelectorAll('#page-statement .dimension-tab');
-            tabs.forEach(function(t) { t.classList.remove('active'); });
-            tabs.forEach(function(t) {
-                if (t.dataset.dimension === dim) t.classList.add('active');
-            });
-
-            var tables = document.querySelectorAll('#page-statement .dimension-table');
-            tables.forEach(function(t) { t.classList.remove('active'); });
-            document.getElementById('statement-table-' + dim).classList.add('active');
-
-            var labels = {
-                'company': '单位名称',
-                'group': '课题组名称',
-                'customer': '客户名称'
-            };
-            document.getElementById('dimension-filter-label-statement').textContent = labels[dim];
-        }
-
-        /* ===== 对账单侧边面板 ===== */
-        function openStatementSidePanel(title) {
-            document.getElementById('panel-title').textContent = title;
-            document.getElementById('sidePanel').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        /* ===== 对账单全选勾选框 ===== */
-        function toggleAllStatementCheckbox(master) {
-            var checkboxes = document.querySelectorAll('#page-statement .statement-checkbox');
-            checkboxes.forEach(function(cb) { cb.checked = master.checked; });
-        }
-
-        /* ===== 配置修改侧边面板 ===== */
-        function openConfigSidePanel(groupId) {
-            var panel = document.getElementById('sidePanel');
-            var h3 = document.querySelector('.side-panel-header h3');
-            h3.innerHTML = '修改配置 - <span id="panel-title">' + groupId + '</span>';
-            var body = document.querySelector('.side-panel-body');
-
-            // 生成报账周期月份下拉
-            var monthOptions = '';
-            for (var d = 1; d <= 31; d++) {
-                monthOptions += '<option value="' + d + '">' + d + '</option>';
-            }
-            var monthNames = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
-            var monthRows = '<tr>';
-            for (var m = 0; m < 12; m++) {
-                monthRows += '<th>' + monthNames[m] + '</th>';
-            }
-            monthRows += '</tr><tr>';
-            for (var m = 0; m < 12; m++) {
-                monthRows += '<td><select id="bc-month-' + (m+1) + '" disabled>' + monthOptions.replace('value="28"', 'value="28" selected') + '</select></td>';
-            }
-            monthRows += '</tr>';
-
-            body.innerHTML =
-                '<div class="config-edit-form">' +
-                    '<div class="config-edit-section">' +
-                        '<h4>对账维度配置</h4>' +
-                        '<div class="dimension-radio-group">' +
-                            '<label><input type="radio" name="dimension" value="individual" onchange="toggleDimensionSub(this)"> 按客户个人</label>' +
-                            '<label><input type="radio" name="dimension" value="group" checked onchange="toggleDimensionSub(this)"> 按课题组</label>' +
-                        '</div>' +
-                        '<div class="dimension-sub-section" id="dim-sub-individual">' +
-                            '<div class="sub-header">报账人信息</div>' +
-                            '<div class="config-edit-grid">' +
-                                '<div class="form-group"><label>报账人姓名</label><input type="text" placeholder="请输入报账人姓名"></div>' +
-                                '<div class="form-group"><label>联系方式</label><input type="text" placeholder="请输入联系方式"></div>' +
-                                '<div class="form-group"><label>邮箱</label><input type="email" placeholder="请输入邮箱地址"></div>' +
-                                '<div class="form-group"><label>详细地址</label><input type="text" placeholder="请输入详细地址"></div>' +
-                            '</div>' +
-                            '<div style="margin-top:12px"><button class="add-row-btn" onclick="addMergeRow(\'merge-list-customer\', demoCustomers, \'请选择客户名称\')">+ 添加其他合并报账客户</button></div>' +
-                            '<div class="merge-list" id="merge-list-customer"></div>' +
-                        '</div>' +
-                        '<div class="dimension-sub-section active" id="dim-sub-group">' +
-                            '<div class="sub-header">报账人信息</div>' +
-                            '<div class="config-edit-grid">' +
-                                '<div class="form-group"><label>报账人姓名</label><input type="text" placeholder="请输入报账人姓名" value="张会计"></div>' +
-                                '<div class="form-group"><label>联系方式</label><input type="text" placeholder="请输入联系方式" value="13800000001"></div>' +
-                                '<div class="form-group"><label>邮箱</label><input type="email" placeholder="请输入邮箱地址" value="zhang@example.com"></div>' +
-                                '<div class="form-group"><label>详细地址</label><input type="text" placeholder="请输入详细地址" value="北京市海淀区中关村大街1号"></div>' +
-                            '</div>' +
-                            '<div style="margin-top:12px"><button class="add-row-btn" onclick="addMergeRow(\'merge-list-group\', demoGroups, \'请选择课题组名称\')">+ 添加其他合并报账课题组</button></div>' +
-                            '<div class="merge-list" id="merge-list-group"></div>' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="config-edit-section">' +
-                        '<h4>自动化配置</h4>' +
-                        '<div class="form-group">' +
-                            '<label>报账周期</label>' +
-                            '<div class="billing-cycle-radio">' +
-                                '<label><input type="radio" name="billingCycle" value="none" checked onchange="toggleBillingCycle(this.value)"> 无约定</label>' +
-                                '<label><input type="radio" name="billingCycle" value="custom" onchange="toggleBillingCycle(this.value)"> 有约定</label>' +
-                            '</div>' +
-                            '<div class="billing-cycle-table-wrap">' +
-                                '<table class="billing-cycle-table">' + monthRows + '</table>' +
-                            '</div>' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                            '<label>凭证上传</label>' +
-                            '<div class="upload-area" onclick="document.getElementById(\'fileUpload\').click()">' +
-                                '<div class="upload-icon">+</div>' +
-                                '<div class="upload-text">点击上传附件</div>' +
-                                '<div class="upload-hint">支持图片、文档类型，提交后不可修改</div>' +
-                                '<input type="file" id="fileUpload" accept="image/*,.pdf,.doc,.docx" style="display:none" onchange="handleFileUpload(this)">' +
-                            '</div>' +
-                            '<div class="upload-record-list" id="uploadRecordList">' +
-                                '<div class="upload-record-header">上传记录</div>' +
-                                '<div class="upload-record-item">' +
-                                    '<span class="file-name">对账凭证_202606.pdf</span>' +
-                                    '<span class="file-meta">系统管理员 · 2026-06-15 14:30</span>' +
-                                '</div>' +
-                                '<div class="upload-record-item">' +
-                                    '<span class="file-name">结算清单_202606.docx</span>' +
-                                    '<span class="file-meta">系统管理员 · 2026-06-15 14:25</span>' +
-                                '</div>' +
-                            '</div>' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="config-edit-footer">' +
-                        '<button class="btn btn-secondary" onclick="closeSidePanel()">取消</button>' +
-                        '<button class="btn btn-primary" onclick="alert(\'保存成功\');closeSidePanel()">保存</button>' +
-                    '</div>' +
-                '</div>';
-
-            panel.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function toggleDimensionSub(radio) {
-            document.getElementById('dim-sub-individual').classList.toggle('active', radio.value === 'individual');
-            document.getElementById('dim-sub-group').classList.toggle('active', radio.value === 'group');
-        }
-
-        function toggleBillingCycle(value) {
-            var disabled = (value === 'none');
-            for (var m = 1; m <= 12; m++) {
-                var sel = document.getElementById('bc-month-' + m);
-                if (sel) sel.disabled = disabled;
-            }
-        }
-
-        function handleFileUpload(input) {
-            if (input.files && input.files[0]) {
-                alert('已上传: ' + input.files[0].name);
-                input.value = '';
-            }
-        }
-
-        /* ===== 演示数据 ===== */
-        var demoCustomers = [
-            '北京华大基因科技有限公司',
-            '上海生工生物工程有限公司',
-            '广州达安基因股份有限公司',
-            '深圳华大智造科技有限公司',
-            '杭州博日科技股份有限公司',
-            '南京诺唯赞生物科技股份有限公司',
-            '武汉康圣环球医学检验所有限公司',
-            '成都贝瑞和康基因技术有限公司'
-        ];
-        var demoGroups = [
-            '张教授课题组（分子生物学）',
-            '李教授课题组（遗传学）',
-            '王教授课题组（细胞生物学）',
-            '赵教授课题组（药物研发）',
-            '陈教授课题组（免疫学）',
-            '刘教授课题组（化学生物学）',
-            '周教授课题组（神经科学）',
-            '吴教授课题组（合成生物学）'
-        ];
-
-        /* ===== 多选下拉 ===== */
+        /* ===== 搜索多选下拉组件 ===== */
         function createMultiSelectHTML(id, items, placeholder) {
             var html = '<div class="multi-select" id="' + id + '">';
             html += '<div class="multi-select-trigger" onclick="toggleMultiSelect(this)">';
@@ -1558,48 +1550,13 @@
             });
         }
 
-        function addMergeRow(containerId, items, placeholder) {
-            var list = document.getElementById(containerId);
-            if (!list) return;
-            var id = ++_mergeRowCounter;
-            var row = document.createElement('div');
-            row.className = 'merge-row';
-            row.id = 'merge-row-' + id;
-            row.innerHTML =
-                '<div class="merge-row-field">' + createMultiSelectHTML('ms-' + id, items, placeholder) + '</div>' +
-                '<div class="merge-row-field"><input type="text" class="merge-input" placeholder="报账人姓名"></div>' +
-                '<div class="merge-row-field"><input type="text" class="merge-input" placeholder="联系方式"></div>' +
-                '<div class="merge-row-field"><input type="text" class="merge-input" placeholder="邮箱"></div>' +
-                '<button class="merge-row-del" onclick="removeMergeRow(' + id + ')">×</button>';
-            list.appendChild(row);
-        }
-
-        function removeMergeRow(id) {
-            var row = document.getElementById('merge-row-' + id);
-            if (row) row.remove();
-        }
-
         function escHtml(str) {
             var d = document.createElement('div');
             d.textContent = str || '';
             return d.innerHTML;
         }
 
-        /* ===== 修改记录悬浮框 ===== */
-        function toggleModifyRecord(el) {
-            el.classList.toggle('active');
-        }
-
-        /* 点击其他区域关闭修改记录悬浮框 */
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.modify-record-trigger')) {
-                document.querySelectorAll('.modify-record-trigger.active').forEach(function(el) {
-                    el.classList.remove('active');
-                });
-            }
-        });
-
-        /* 点击其他区域关闭多选下拉 */
+        /* 点击外部关闭多选下拉 */
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.multi-select')) {
                 document.querySelectorAll('.multi-select.open').forEach(function(el) {
@@ -1608,29 +1565,129 @@
             }
         });
 
-        /* ===== 键盘快捷键: ESC 关闭面板 ===== */
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeSidePanel();
-        });
+        /* ===== 账单配置页签切换 ===== */
+        function switchConfigTab(tab) {
+            document.querySelectorAll('#page-bill-config .config-tab-btn').forEach(function(b) {
+                b.classList.toggle('active', b.dataset.tab === tab);
+            });
+            document.querySelectorAll('#page-bill-config .config-tab-content').forEach(function(c) {
+                c.style.display = c.dataset.tab === tab ? '' : 'none';
+            });
+        }
 
-        /* ===== iframe 通信 ===== */
-        window.addEventListener('message', function(e) {
-            var iframe = document.getElementById('page-iframe');
-            if (e.data && e.data.iframeHeight) {
-                iframe.style.height = e.data.iframeHeight + 'px';
+        /* ===== 合并对账弹窗 ===== */
+        function openMergeConfigModal() {
+            document.getElementById('mergeConfigModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMergeConfigModal() {
+            document.getElementById('mergeConfigModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function toggleMergeSearchDim(value) {
+            var input = document.querySelector('#mergeConfigModal input[type="text"]');
+            input.placeholder = value === 'customer' ? '输入客户名称/ID 搜索' : '输入课题组名称/ID 搜索';
+        }
+
+        /* ===== 合并对账多值编辑弹窗 ===== */
+        var mergeExpandCustomers = ['北京华大基因', '上海药明康德', '广州达安基因', '深圳华大智造', '杭州博日科技', '南京诺唯赞', '武汉华大', '苏州金唯智'];
+        var mergeExpandGroups = ['张教授课题组', '李教授课题组', '王教授课题组', '赵教授课题组', '陈教授课题组', '刘教授课题组'];
+
+        var mergeExpandCtx = null;
+
+        function openMergeExpandModal(btn) {
+            var cell = btn.closest('td');
+            var row = cell.closest('tr');
+            var cellIndex = Array.from(row.querySelectorAll('td')).indexOf(cell);
+            var type = cellIndex === 1 ? 'customer' : 'group';
+            var biller = row.querySelector('td').textContent.trim();
+            var tags = cell.querySelectorAll('.merge-tag');
+            var items = Array.from(tags).map(function(t) { return t.textContent.trim(); });
+            mergeExpandCtx = { cellIndex: cellIndex, type: type, items: items, btn: btn, row: row };
+
+            document.getElementById('merge-expand-title').textContent = (type === 'customer' ? '客户名称' : '课题组名称') + ' - ' + biller;
+
+            var pool = type === 'customer' ? mergeExpandCustomers : mergeExpandGroups;
+            var container = document.getElementById('merge-expand-items');
+            container.innerHTML = '';
+            pool.forEach(function(item) {
+                var checked = items.indexOf(item) !== -1 ? 'checked' : '';
+                var label = document.createElement('label');
+                label.className = 'multi-select-option';
+                label.style.display = 'flex';
+                label.innerHTML = '<input type="checkbox" value="' + item.replace(/"/g, '&quot;') + '" ' + checked + '> ' + item;
+                container.appendChild(label);
+            });
+
+            document.getElementById('mergeExpandModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            document.getElementById('merge-expand-search').value = '';
+        }
+
+        function closeMergeExpandModal() {
+            document.getElementById('mergeExpandModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function filterMergeExpandSearch(input) {
+            var q = input.value.toLowerCase();
+            var labels = document.getElementById('merge-expand-items').querySelectorAll('.multi-select-option');
+            labels.forEach(function(l) {
+                l.style.display = l.textContent.toLowerCase().indexOf(q) !== -1 ? 'flex' : 'none';
+            });
+        }
+
+        function saveMergeExpand() {
+            if (!mergeExpandCtx) return;
+            var checked = document.querySelectorAll('#merge-expand-items input[type="checkbox"]:checked');
+            var items = Array.from(checked).map(function(cb) { return cb.value; });
+            var cell = mergeExpandCtx.row.querySelectorAll('td')[mergeExpandCtx.cellIndex];
+            var list = cell.querySelector('.merge-value-list');
+            list.innerHTML = '';
+            items.forEach(function(item, i) {
+                var span = document.createElement('span');
+                span.className = 'merge-tag' + (i >= 2 ? ' merge-hidden' : '');
+                span.textContent = item;
+                list.appendChild(span);
+            });
+            if (items.length > 2) {
+                var btn = document.createElement('span');
+                btn.className = 'merge-expand-btn';
+                btn.onclick = function() { openMergeExpandModal(btn); };
+                btn.textContent = '+' + (items.length - 2) + ' 更多';
+                list.appendChild(btn);
             }
-            if (e.data && e.data.action === 'openSidePanel') {
-                document.getElementById('panel-title').textContent = e.data.title;
-                document.getElementById('sidePanel').classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-            if (e.data && e.data.action === 'openConfigSidePanel') {
-                openConfigSidePanel(e.data.groupId);
-            }
-            if (e.data && e.data.action === 'openStatementDetailPanel') {
-                openStatementDetailPanel(e.data.billId);
-            }
-        });
+            // Update context items for next open
+            mergeExpandCtx.items = items;
+            closeMergeExpandModal();
+        }
+
+        function toggleMergeMonth(cb, month) {
+            var sel = document.getElementById('mm-day-' + month);
+            if (sel) sel.disabled = !cb.checked;
+        }
+
+        /* ===== 客户对账配置弹窗 ===== */
+        function openCustConfigModal(btn) {
+            var row = btn.closest('tr');
+            var cells = row ? row.querySelectorAll('td') : [];
+            var custName = cells.length > 1 ? cells[1].textContent.trim() : '客户名称';
+            document.getElementById('cust-config-title').textContent = custName;
+            document.getElementById('custConfigModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCustConfigModal() {
+            document.getElementById('custConfigModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function toggleCustMonth(cb, month) {
+            var sel = document.getElementById('cust-day-' + month);
+            if (sel) sel.disabled = !cb.checked;
+        }
 
         /* ===== 部署到 GitHub Pages ===== */
         function showDeployModal() {

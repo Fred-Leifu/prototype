@@ -25,9 +25,9 @@
 
 ---
 
-# 擎科生物 - 销综系统账单管理原型
+# 擎科生物 - 销综系统原型
 
-纯前端 HTML/CSS/JS 原型，无框架依赖。
+纯前端 HTML/CSS/JS 原型，无框架依赖。内联页面（无 iframe 子页面）。
 
 ## 启动与部署
 
@@ -40,27 +40,28 @@ npm run deploy         # 部署到 GitHub Pages
 
 ## 页面架构
 
-- **index.html** — 主外壳（导航 + 侧面板 + 需求概览），通过 `<iframe>` 嵌入子页面
-- **子页面通信**：`window.postMessage()` 桥接 iframe → 父页面（打开侧面板、调整高度）
-- **unbilled.html** — 未出账账单（3 维度标签页：单位/课题组/客户 + 侧面板订单详情 + 分页）
-- **reconciliation.html** — 对账单（同上 + 行首复选框列）
-- **config.html** — 对账要求配置（课题组列表 CRUD + 侧面板修改 + 修改记录弹窗）
+- **index.html** — 主外壳（Axure 风格导航 + 需求概览 + V1版本业务场景&流程 + 回收站 + 部署弹窗）
+- 所有页面为内联 `div.page-content`，通过 `showPage()` 控制显隐
 
-子页面通过 `/styles.css` 共享样式。
+## 页面列表
+
+| 导航路径 | pageName | 类型 |
+|----------|----------|------|
+| 需求概览 > 项目简介-简介 | overview-intro | 内联 |
+| 需求概览 > 项目简介-修订记录 | overview-revision | 内联 |
+| 需求概览 > 项目简介-历史数据 | overview-history | 内联 |
+| 需求概览 > 项目简介-上线风险 | overview-risk | 内联 |
+| 需求概览 > 项目简介-验收重点 | overview-acceptance | 内联 |
+| 需求正文 > 业务场景&流程 > V1版本业务场景&流程 | scene-v1 | 内联 |
+| 回收站 | recycle | 内联 |
 
 ## 技术约束
 
 - **无框架**：纯 JavaScript，不使用 Vue/React 等
-- **样式**：2045 行 CSS，CSS 变量主题化，玻璃态效果
+- **样式**：CSS 变量主题化，玻璃态效果
 - **字体**：Google Fonts Inter（UI）+ JetBrains Mono（日志）
 - **部署**：GitHub Pages（deploy.js 通过 GitHub API 自动部署，需 `GH_TOKEN` 或 `.github/token`）
 - **仓库**：https://github.com/Fred-Leifu/prototype（已公开）
-- **sidepanel DOM 在 index.html**，子页面通过 `postMessage` 请求打开，禁止在子页面内创建
-
-## 需求文档
-
-`docs/260601商务中心规划-账单.md` — PRD，定义了 V1-V5 版本规划
-`docs/Prompt.txt` — 需求变更清单（RP-260616-0001 ~ 0007），追溯原型开发过程
 
 ## OpenCode 技能
 
@@ -68,6 +69,6 @@ npm run deploy         # 部署到 GitHub Pages
 
 ## 常用操作
 
-- 新增页面/功能：在 `docs/Prompt.txt` 追加需求，AI 实现后提交
-- 样式调整：修改 `styles.css`，页面级样式在各 html 的 `<style>` 中
-- 侧面板逻辑：`index.html` 的 `openSidePanel()` / `closeSidePanel()`
+- 添加新页面：在 `index.html` 新增 `div#page-{name}.page-content`，并在 `showPage()` 的 `titles` 中添加映射，在 `axure-nav` 中添加导航项
+- 样式调整：修改 `styles.css`
+- 部署：`npm run deploy`（或页面内点击「发布」）
